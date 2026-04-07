@@ -9,14 +9,14 @@ submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 date: 2026-02-26
 consensus: true
 v: 3
-area: Security
+# area: Security
 wg: LAMPS
 keyword:
  - certificate
  - signature
  - X.509
 venue:
-  github: "lamps-wg/one-signature-certs"
+  github: "lamps-wg/draft-ietf-lamps-one-signature-certs"
 
 author:
   -
