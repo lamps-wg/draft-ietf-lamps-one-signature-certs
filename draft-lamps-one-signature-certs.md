@@ -161,7 +161,9 @@ However, a validation service may have several options available for how to hand
 - The verifier may list the CA key and identity as trusted and treat it as a trust anchor.
 - The verifier may cross certify the CA and make it available for validation to a local trusted Trust Anchor.
 
-This profile assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation will require additional trust provisioning by the verifier.
+In addition, when a certificate repository is available, renewal of the CA certificate can preserve the ability to validate the infinite validity end enitiy certificate.
+
+This profile assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation MAY require additional trust provisioning by the verifier.
 
 Mechanisms for establishing trust in a CA beyond their certificate validity period are outside the scope of this profile.
 
