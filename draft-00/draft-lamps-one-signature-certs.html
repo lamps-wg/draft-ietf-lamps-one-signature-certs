@@ -1322,8 +1322,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
               <p id="section-1.1.2-3.2.1">The verifier may cross certify the CA and make it available for validation to a local trusted Trust Anchor.<a href="#section-1.1.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-1.1.2-4">This profile assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation will require additional trust provisioning by the verifier.<a href="#section-1.1.2-4" class="pilcrow">¶</a></p>
-<p id="section-1.1.2-5">Mechanisms for establishing trust in a CA beyond their certificate validity period are outside the scope of this profile.<a href="#section-1.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-1.1.2-4">In addition, when a certificate repository is available, renewal of the CA certificate can preserve the ability to validate the infinite validity end enitiy certificate.<a href="#section-1.1.2-4" class="pilcrow">¶</a></p>
+<p id="section-1.1.2-5">This profile assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation <span class="bcp14">MAY</span> require additional trust provisioning by the verifier.<a href="#section-1.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-1.1.2-6">Mechanisms for establishing trust in a CA beyond their certificate validity period are outside the scope of this profile.<a href="#section-1.1.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
