@@ -1157,7 +1157,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                     <p id="section-toc.1-1.1.2.1.2.1.1" class="keepWithNext"><a href="#section-1.1.1" class="auto internal xref">1.1.1</a>.  <a href="#name-revocation" class="internal xref">Revocation</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1.2.2">
-                    <p id="section-toc.1-1.1.2.1.2.2.1" class="keepWithNext"><a href="#section-1.1.2" class="auto internal xref">1.1.2</a>.  <a href="#name-ca-key-validity" class="internal xref">CA key validity</a></p>
+                    <p id="section-toc.1-1.1.2.1.2.2.1" class="keepWithNext"><a href="#section-1.1.2" class="auto internal xref">1.1.2</a>.  <a href="#name-ca-certificate-validity" class="internal xref">CA certificate validity</a></p>
 </li>
                 </ul>
 </li>
@@ -1307,23 +1307,23 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1.1.1-6">An example usage where this is useful is in services where the signed document is stored as an internal evidence record, such as when a Tax agency allows citizens to sign their tax declarations. This record is then pulled out and used only in case of a dispute where the identified signer challenges the signature. A revocation service is less likely to contribute to this process. If the challenge is successful, the signed document will be removed without affecting any other signed documents in the archive.<a href="#section-1.1.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="ca-key-validity">
+<div id="ca-certificate-validity">
 <section id="section-1.1.2">
-          <h4 id="name-ca-key-validity">
-<a href="#section-1.1.2" class="section-number selfRef">1.1.2. </a><a href="#name-ca-key-validity" class="section-name selfRef">CA key validity</a>
+          <h4 id="name-ca-certificate-validity">
+<a href="#section-1.1.2" class="section-number selfRef">1.1.2. </a><a href="#name-ca-certificate-validity" class="section-name selfRef">CA certificate validity</a>
           </h4>
-<p id="section-1.1.2-1">Even if the end entity certificate has infinite validity, the capability to validate the certifificate is limited to the capability to trust the CA. For initial validation, in a typical scenario, this is limited by the validity period of the CA certificate.<a href="#section-1.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-1.1.2-2">However, a validation service may have several options available for how to handle CA trust, in particular in the case of re-validation of archived documents that has been validated previously:<a href="#section-1.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-1.1.2-1">Even if the end entity certificate has infinite validity, the capability to validate the certificate is limited to the capability to trust the CA. For initial validation, in a typical scenario, this is limited by the validity period of the CA certificate.<a href="#section-1.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.1.2-2">However, a validation service may have several options available for how to handle CA trust, in particular when re-validating archived documents:<a href="#section-1.1.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.1.2-3.1">
-              <p id="section-1.1.2-3.1.1">The verifier may list the CA key and identity as a trusted and treat it as a trust anchor.<a href="#section-1.1.2-3.1.1" class="pilcrow">¶</a></p>
+              <p id="section-1.1.2-3.1.1">The verifier may list the CA key and identity as trusted and treat it as a trust anchor.<a href="#section-1.1.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-1.1.2-3.2">
               <p id="section-1.1.2-3.2.1">The verifier may cross certify the CA and make it available for validation to a local trusted Trust Anchor.<a href="#section-1.1.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-1.1.2-4">The typical use case for this profile is designed with the assumption that initial validation of a signed document is performed within the validity period of the CA certificate and that full benefit of a non-exiring end entity certificate will require some additional setup by the verifier for later re-validation.<a href="#section-1.1.2-4" class="pilcrow">¶</a></p>
-<p id="section-1.1.2-5">It is outside the scope of this profile to define how to handle CA key validity when the CA certificate has expired.<a href="#section-1.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-1.1.2-4">This profile assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation will require additional trust provisioning by the verifier.<a href="#section-1.1.2-4" class="pilcrow">¶</a></p>
+<p id="section-1.1.2-5">Mechanisms for establishing trust in a CA beyond their certificate validity period are outside the scope of this profile.<a href="#section-1.1.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>

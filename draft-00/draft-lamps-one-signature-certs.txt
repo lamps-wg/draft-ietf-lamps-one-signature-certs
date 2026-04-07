@@ -68,7 +68,7 @@ Table of Contents
    1.  Introduction
      1.1.  Basic features
        1.1.1.  Revocation
-       1.1.2.  CA key validity
+       1.1.2.  CA certificate validity
    2.  Conventions and Definitions
    3.  Certificate content
      3.1.  The signedDocumentBinding extension
@@ -180,31 +180,31 @@ Table of Contents
    successful, the signed document will be removed without affecting any
    other signed documents in the archive.
 
-1.1.2.  CA key validity
+1.1.2.  CA certificate validity
 
    Even if the end entity certificate has infinite validity, the
-   capability to validate the certifificate is limited to the capability
+   capability to validate the certificate is limited to the capability
    to trust the CA.  For initial validation, in a typical scenario, this
    is limited by the validity period of the CA certificate.
 
    However, a validation service may have several options available for
-   how to handle CA trust, in particular in the case of re-validation of
-   archived documents that has been validated previously:
+   how to handle CA trust, in particular when re-validating archived
+   documents:
 
-   *  The verifier may list the CA key and identity as a trusted and
-      treat it as a trust anchor.
+   *  The verifier may list the CA key and identity as trusted and treat
+      it as a trust anchor.
 
    *  The verifier may cross certify the CA and make it available for
       validation to a local trusted Trust Anchor.
 
-   The typical use case for this profile is designed with the assumption
-   that initial validation of a signed document is performed within the
-   validity period of the CA certificate and that full benefit of a non-
-   exiring end entity certificate will require some additional setup by
-   the verifier for later re-validation.
+   This profile assumes that initial validation of a signed document is
+   performed within the validity period of the CA certificate.
+   Realizing the full benefit of a non-expiring end entity certificate
+   for later re-validation will require additional trust provisioning by
+   the verifier.
 
-   It is outside the scope of this profile to define how to handle CA
-   key validity when the CA certificate has expired.
+   Mechanisms for establishing trust in a CA beyond their certificate
+   validity period are outside the scope of this profile.
 
 2.  Conventions and Definitions
 
