@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-04-07T01:26:41.120888+00:00",
+  "timestamp": "2026-04-09T01:18:51.442732+00:00",
   "repo": "lamps-wg/draft-ietf-lamps-one-signature-certs",
   "labels": [
     {
@@ -49,6 +49,175 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
-  "pulls": []
+  "issues": [
+    {
+      "number": 2,
+      "id": "I_kwDOR5texs77aHWm",
+      "title": "Create example",
+      "url": "https://github.com/lamps-wg/draft-ietf-lamps-one-signature-certs/issues/2",
+      "state": "OPEN",
+      "author": "Razumain",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-04-07T13:17:50Z",
+      "updatedAt": "2026-04-07T13:17:50Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOR5texs77aLLU",
+      "title": "Markdown format issue in itemized list",
+      "url": "https://github.com/lamps-wg/draft-ietf-lamps-one-signature-certs/issues/3",
+      "state": "CLOSED",
+      "author": "Razumain",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Originally posted by @ralienpp\n\nIt is currently rendered as such:\n\n> Examples include: - For XML Signatures , the hash of the SignedInfo element. - For CMS Signatures , the DER-encoded SignedAttributes structure. - For other formats, the data structure input directly to the signature algorithm.\n\nPerhaps another `\\n` after \"include:\" can address that.",
+      "createdAt": "2026-04-07T13:20:46Z",
+      "updatedAt": "2026-04-07T13:32:19Z",
+      "closedAt": "2026-04-07T13:32:19Z",
+      "comments": [
+        {
+          "author": "Razumain",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thank for noticing this. Fixed in draft-00 soon to be posted.",
+          "createdAt": "2026-04-07T13:32:19Z",
+          "updatedAt": "2026-04-07T13:32:19Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOR5texs77aNFw",
+      "title": "Default binding explanation not clear",
+      "url": "https://github.com/lamps-wg/draft-ietf-lamps-one-signature-certs/issues/4",
+      "state": "OPEN",
+      "author": "Razumain",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Originally posted by @ralienpp\n\nThe text says:\n\n> In this case, the `dataTbsHash` value is the hash of the exact data that is hashed and signed by the signature format in use.\n\nIt sounds like you hash it twice, i.e. `dataTbsHash = hash(data)` (\"hash of the exact data\"), and then again `sign(hash(dataTbshash), ...)` (\"that is hashed and signed...).\n",
+      "createdAt": "2026-04-07T13:22:01Z",
+      "updatedAt": "2026-04-07T13:22:50Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "Razumain",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks for pointing this out. That was not the intention of the text.\n\nI think the confusion is caused by being overly technical with explaining how signatures are created. Which should be obvious.\n\nIt could be simplified with:\n\n> In this case, the `dataTbsHash` value is the hash of the exact data that is signed by the signature format in use.\n\nI'm not sure if we need to say more than this. What do you think?",
+          "createdAt": "2026-04-07T13:22:50Z",
+          "updatedAt": "2026-04-07T13:22:50Z"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOR5texs77cE6j",
+      "title": "Requirement levels",
+      "url": "https://github.com/lamps-wg/draft-ietf-lamps-one-signature-certs/issues/5",
+      "state": "OPEN",
+      "author": "Razumain",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "We should discuss whether the present requirement levels are well motivated.\n\nThe current document states that a certificate compliant with the profile:\n\n- MUST never expire\n- MUST not support revocation\n- MUST include the signedDocumentBinding extension\n\nHowever. All certificate parsing software will have to evaluate expiration, revocation and signedDocumentBinding individually, and not from the context of whether a certificate complies with this profile.\n\nThe current MUST requirements makes sense, but it is hard to be certain that there is no legitimate use case where you for example may want to set an explicit expiration date.\n\nPerhaps we should change all or some of these to RECOMMENDED/SHOULD, but leave it to each implementer to choose what best suits their use-case.",
+      "createdAt": "2026-04-07T14:38:59Z",
+      "updatedAt": "2026-04-09T00:23:38Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "russhousley",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "MUST include noRevAvail?",
+          "createdAt": "2026-04-08T02:02:01Z",
+          "updatedAt": "2026-04-08T02:02:01Z"
+        },
+        {
+          "author": "Razumain",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> MUST include noRevAvail?\n\nRight now yes. As currently defined in section 3.",
+          "createdAt": "2026-04-09T00:23:38Z",
+          "updatedAt": "2026-04-09T00:23:38Z"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOR5texs78CoBD",
+      "title": "Define OIDs",
+      "url": "https://github.com/lamps-wg/draft-ietf-lamps-one-signature-certs/issues/7",
+      "state": "OPEN",
+      "author": "Razumain",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The module and extension OIDs need to be defined.",
+      "createdAt": "2026-04-09T00:24:10Z",
+      "updatedAt": "2026-04-09T00:24:10Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOR5texs7QfCci",
+      "title": "Copy of last non lamps version",
+      "url": "https://github.com/lamps-wg/draft-ietf-lamps-one-signature-certs/pull/1",
+      "state": "MERGED",
+      "author": "Razumain",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-04-07T12:25:09Z",
+      "updatedAt": "2026-04-07T12:27:53Z",
+      "baseRepository": "lamps-wg/draft-ietf-lamps-one-signature-certs",
+      "baseRefName": "main",
+      "baseRefOid": "c8a1ad4c6d0ef23031c3f0f1a0a58278fc0be4a4",
+      "headRepository": "lamps-wg/draft-ietf-lamps-one-signature-certs",
+      "headRefName": "add-first-draft",
+      "headRefOid": "869d756619f2bf0054248da131c23370b595c382",
+      "closedAt": "2026-04-07T12:26:06Z",
+      "mergedAt": "2026-04-07T12:26:06Z",
+      "mergedBy": "Razumain",
+      "mergeCommit": {
+        "oid": "eeca252a933025df4f31bc59d4fc8782692ed242"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDOR5texs7Qh9FK",
+      "title": "Draft 00",
+      "url": "https://github.com/lamps-wg/draft-ietf-lamps-one-signature-certs/pull/6",
+      "state": "MERGED",
+      "author": "Razumain",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Includes proposed updates for draft 00",
+      "createdAt": "2026-04-07T14:54:52Z",
+      "updatedAt": "2026-04-09T00:09:05Z",
+      "baseRepository": "lamps-wg/draft-ietf-lamps-one-signature-certs",
+      "baseRefName": "main",
+      "baseRefOid": "6ac6e7d260d82447ff49b02d11e6ec4f69cddf46",
+      "headRepository": "lamps-wg/draft-ietf-lamps-one-signature-certs",
+      "headRefName": "draft-00",
+      "headRefOid": "f9f54fab24e83c8f3a1fc244d9669f03a0c1ac14",
+      "closedAt": "2026-04-09T00:08:54Z",
+      "mergedAt": "2026-04-09T00:08:54Z",
+      "mergedBy": "Razumain",
+      "mergeCommit": {
+        "oid": "a9a94632581fcebe57fa0c588cd669a65dfe3678"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
 }
