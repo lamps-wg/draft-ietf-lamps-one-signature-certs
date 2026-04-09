@@ -152,6 +152,21 @@ Applications that require traditional revocation checking that provides the stat
 
 An example usage where this is useful is in services where the signed document is stored as an internal evidence record, such as when a Tax agency allows citizens to sign their tax declarations. This record is then pulled out and used only in case of a dispute where the identified signer challenges the signature. A revocation service is less likely to contribute to this process. If the challenge is successful, the signed document will be removed without affecting any other signed documents in the archive.
 
+### CA certificate validity
+
+Even if the end entity certificate has infinite validity, the capability to validate the certificate is limited to the capability to trust the CA. For initial validation, in a typical scenario, this is limited by the validity period of the CA certificate.
+
+However, a validation service may have several options available for how to handle CA trust, in particular when re-validating archived documents:
+
+- The verifier may list the CA key and identity as trusted and treat it as a trust anchor.
+- The verifier may cross certify the CA and make it available for validation to a local trusted Trust Anchor.
+
+In addition, when a certificate repository is available, renewal of the CA certificate can preserve the ability to validate the infinite validity end enitiy certificate.
+
+This profile assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation MAY require additional trust provisioning by the verifier.
+
+Mechanisms for establishing trust in a CA beyond their certificate validity period are outside the scope of this profile.
+
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
@@ -205,9 +220,10 @@ This document defines a set of bindingType identifiers. Additional bindingType i
 ### Default Binding
 
 When the bindingType is absent, the default binding applies.
-In this case, the dataTbsHash value is the hash of the exact data that is hashed and signed by the signature format in use.
+In this case, the dataTbsHash value is the hash of the exact data that is signed by the signature format in use.
 
 Examples include:
+
 - For XML Signatures {{XMLDSIG11}}, the hash of the SignedInfo element.
 - For CMS Signatures {{RFC5652}}, the DER-encoded SignedAttributes structure.
 - For other formats, the data structure input directly to the signature algorithm.
