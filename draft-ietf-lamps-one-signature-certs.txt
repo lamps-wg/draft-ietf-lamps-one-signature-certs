@@ -10,7 +10,7 @@ Expires: 30 August 2026                                   Vigil Security
 
 
                        One Signature Certificates
-                 draft-lamps-one-signature-certs-latest
+              draft-ietf-lamps-one-signature-certs-latest
 
 Abstract
 
@@ -27,7 +27,8 @@ About This Document
    This note is to be removed before publishing as an RFC.
 
    Status information for this document may be found at
-   https://datatracker.ietf.org/doc/draft-lamps-one-signature-certs/.
+   https://datatracker.ietf.org/doc/draft-ietf-lamps-one-signature-
+   certs/.
 
    Source for this draft and an issue tracker can be found at
    https://github.com/lamps-wg/draft-ietf-lamps-one-signature-certs.
