@@ -3,8 +3,9 @@ title: "One Signature Certificates"
 abbrev: "OSC"
 ipr: "trust200902"
 category: std
+replaces: draft-santesson-one-signature-certs
 
-docname: draft-lamps-one-signature-certs-latest
+docname: draft-ietf-lamps-one-signature-certs-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 date: 2026-02-26
 consensus: true
