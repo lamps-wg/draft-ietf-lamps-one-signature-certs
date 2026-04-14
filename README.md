@@ -4,10 +4,10 @@
 
 This is the working area for the individual Internet-Draft, "One Signature Certificates".
 
-* [Editor's Copy](https://lamps-wg.github.io/draft-ietf-lamps-one-signature-certs/#go.draft-lamps-one-signature-certs.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-lamps-one-signature-certs)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-lamps-one-signature-certs)
-* [Compare Editor's Copy to Individual Draft](https://lamps-wg.github.io/draft-ietf-lamps-one-signature-certs/#go.draft-lamps-one-signature-certs.diff)
+* [Editor's Copy](https://lamps-wg.github.io/draft-ietf-lamps-one-signature-certs/#go.draft-ietf-lamps-one-signature-certs.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-lamps-one-signature-certs)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-ietf-lamps-one-signature-certs)
+* [Compare Editor's Copy to Individual Draft](https://lamps-wg.github.io/draft-ietf-lamps-one-signature-certs/#go.draft-ietf-lamps-one-signature-certs.diff)
 
 
 ## Contributing
