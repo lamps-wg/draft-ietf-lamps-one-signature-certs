@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-04-09T01:18:51.442732+00:00",
+  "timestamp": "2026-04-16T01:49:53.480385+00:00",
   "repo": "lamps-wg/draft-ietf-lamps-one-signature-certs",
   "labels": [
     {
@@ -215,6 +215,34 @@
       "mergedBy": "Razumain",
       "mergeCommit": {
         "oid": "a9a94632581fcebe57fa0c588cd669a65dfe3678"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOR5texs7SbhpL",
+      "title": "Correcting draft name",
+      "url": "https://github.com/lamps-wg/draft-ietf-lamps-one-signature-certs/pull/8",
+      "state": "MERGED",
+      "author": "Razumain",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-04-14T20:28:59Z",
+      "updatedAt": "2026-04-14T20:31:29Z",
+      "baseRepository": "lamps-wg/draft-ietf-lamps-one-signature-certs",
+      "baseRefName": "main",
+      "baseRefOid": "a9a94632581fcebe57fa0c588cd669a65dfe3678",
+      "headRepository": "lamps-wg/draft-ietf-lamps-one-signature-certs",
+      "headRefName": "correct-draft-name",
+      "headRefOid": "8c4a01f4d16ab3e4f64f87ddcb353401f86f423a",
+      "closedAt": "2026-04-14T20:31:06Z",
+      "mergedAt": "2026-04-14T20:31:06Z",
+      "mergedBy": "Razumain",
+      "mergeCommit": {
+        "oid": "5e12a78d509f02865f22a874673c45951197eb02"
       },
       "comments": [],
       "reviews": []
