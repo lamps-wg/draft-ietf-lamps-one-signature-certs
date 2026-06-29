@@ -1368,9 +1368,9 @@ hashAlg         DigestAlgorithmIdentifier,
 bindingType     UTF8String OPTIONAL }
 </pre><a href="#section-3.1-2" class="pilcrow">¶</a>
 </div>
-<p id="section-3.1-3">The dataTbsHash field <span class="bcp14">MUST</span> contain a hash of the data to be signed.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1-4">The hashAlg field <span class="bcp14">MUST</span> contain the AlgorithmIdentifier of the hash algorithm used to generate the dataTbsHash value.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.1-5">The bindingType field <span class="bcp14">MAY</span> contain an identifier that specifies how the data to be signed is derived from the digital object to be signed.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">The <code>dataTbsHash</code> field <span class="bcp14">MUST</span> contain a hash of the data to be signed.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">The <code>hashAlg</code> field <span class="bcp14">MUST</span> contain the AlgorithmIdentifier of the hash algorithm used to generate the <code>dataTbsHash</code> value.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">The <code>bindingType</code> field <span class="bcp14">MAY</span> contain an identifier that specifies how the data to be signed is derived from the digital object to be signed.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
 <p id="section-3.1-6">Adding this extension to a certificate is a statement by the CA that the signing key is generated exclusively for the purpose of signing the document bound by this extension, and that the signing key is destroyed after signing. The details for this procedure and how the destruction of the signing key is assured <span class="bcp14">SHOULD</span> be outlined in the certificate policy <span>[<a href="#RFC3647" class="cite xref">RFC3647</a>]</span> of the issued certificate.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1379,19 +1379,19 @@ bindingType     UTF8String OPTIONAL }
         <h3 id="name-defined-bindingtype-identif">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-defined-bindingtype-identif" class="section-name selfRef">Defined bindingType identifiers</a>
         </h3>
-<p id="section-3.2-1">The bindingType field defines how the data to be signed (dataTbsHash) is derived from the signed document.
+<p id="section-3.2-1">The <code>bindingType</code> field defines how the data to be signed (<code>dataTbsHash</code>) is derived from the signed document.
 This field identifies a deterministic procedure for selecting the portion of the signed content that is included in the hash computation.
 When the field is omitted, the rules for the default binding type apply.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">The purpose of the dataTbsHash value is to bind the certificate to the document being signed in order to prevent re-use of the signing key for multiple signed documents. This enforces the contract that the signing key is used only once for creation of one signature only. Validators <span class="bcp14">SHOULD</span> verify that the signed document matches the certificate’s binding information.
+<p id="section-3.2-2">The purpose of the <code>dataTbsHash</code> value is to bind the certificate to the document being signed in order to prevent re-use of the signing key for multiple signed documents. This enforces the contract that the signing key is used only once for creation of one signature only. Validators <span class="bcp14">SHOULD</span> verify that the signed document matches the certificate’s binding information.
 This verification is not required for the signature to validate successfully but provides an additional safeguard against misuse or substitution of certificates.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2-3">This document defines a set of bindingType identifiers. Additional bindingType identifiers <span class="bcp14">MAY</span> be defined by future specifications.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">This document defines a set of <code>bindingType</code> identifiers. Additional <code>bindingType</code> identifiers <span class="bcp14">MAY</span> be defined by future specifications.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 <div id="default-binding">
 <section id="section-3.2.1">
           <h4 id="name-default-binding">
 <a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-default-binding" class="section-name selfRef">Default Binding</a>
           </h4>
-<p id="section-3.2.1-1">When the bindingType is absent, the default binding applies.
-In this case, the dataTbsHash value is the hash of the exact data that is signed by the signature format in use.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-1">When the <code>bindingType</code> is absent, the default binding applies.
+In this case, the <code>dataTbsHash</code> value is the hash of the exact data that is signed by the signature format in use.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.1-2">Examples include:<a href="#section-3.2.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2.1-3.1">
@@ -1404,7 +1404,7 @@ In this case, the dataTbsHash value is the hash of the exact data that is signed
               <p id="section-3.2.1-3.3.1">For other formats, the data structure input directly to the signature algorithm.<a href="#section-3.2.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-3.2.1-4">This bindingType <span class="bcp14">MUST NOT</span> be used when the data to be signed includes either the signer certificate itself or a hash of the signer certificate. This includes JWS and COSE signed documents that can include signer certificates in the protected header. JWS signatures <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span> <span class="bcp14">MUST</span> use the "jws" bindingType and COSE signatures <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span> <span class="bcp14">MUST</span> use the "cose" binding type.<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-4">This <code>bindingType</code> <span class="bcp14">MUST NOT</span> be used when the data to be signed includes either the signer certificate itself or a hash of the signer certificate. This includes JWS and COSE signed documents that can include signer certificates in the protected header. JWS signatures <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span> <span class="bcp14">MUST</span> use the "jws" <code>bindingType</code> and COSE signatures <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span> <span class="bcp14">MUST</span> use the "cose" binding type.<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="cades-binding">
@@ -1414,8 +1414,8 @@ In this case, the dataTbsHash value is the hash of the exact data that is signed
           </h4>
 <p id="section-3.2.2-1">Identifier: "cades"<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.2-2">For CMS <span>[<a href="#RFC5652" class="cite xref">RFC5652</a>]</span> or ETSI CAdES <span>[<a href="#CADES" class="cite xref">CADES</a>]</span> signatures incorporating SigningCertificate or SigningCertificateV2 attributes <span>[<a href="#RFC5035" class="cite xref">RFC5035</a>]</span> in signedAttrs,
-the dataTbsHash value is computed over the DER encoding of SignerInfo excluding any instances of SigningCertificate or SigningCertificateV2 attributes from the SignedAttributes set.<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.2-3">This bindingType also applies to PDF <span>[<a href="#ISOPDF2" class="cite xref">ISOPDF2</a>]</span> and ETSI PAdES <span>[<a href="#PADES" class="cite xref">PADES</a>]</span> signed documents when applicable due to its use of CMS for signing.<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
+the <code>dataTbsHash</code> value is computed over the DER encoding of SignerInfo excluding any instances of SigningCertificate or SigningCertificateV2 attributes from the SignedAttributes set.<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-3">This <code>bindingType</code> also applies to PDF <span>[<a href="#ISOPDF2" class="cite xref">ISOPDF2</a>]</span> and ETSI PAdES <span>[<a href="#PADES" class="cite xref">PADES</a>]</span> signed documents when applicable due to its use of CMS for signing.<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="xades-binding">
@@ -1424,7 +1424,7 @@ the dataTbsHash value is computed over the DER encoding of SignerInfo excluding 
 <a href="#section-3.2.3" class="section-number selfRef">3.2.3. </a><a href="#name-xades-binding" class="section-name selfRef">XAdES Binding</a>
           </h4>
 <p id="section-3.2.3-1">Identifier: "xades"<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.3-2">For ETSI XML Advanced Electronic Signatures <span>[<a href="#XADES" class="cite xref">XADES</a>]</span>, the dataTbsHash value is computed over the canonicalized SignedInfo element,
+<p id="section-3.2.3-2">For ETSI XML Advanced Electronic Signatures <span>[<a href="#XADES" class="cite xref">XADES</a>]</span>, the <code>dataTbsHash</code> value is computed over the canonicalized SignedInfo element,
 with any Reference elements whose Type attribute equals "http://uri.etsi.org/01903#SignedProperties" removed prior to hashing.
 This ensures that the SignedProperties element, which may contain references to the signing certificate, does not create a circular dependency. Extraction of the Reference element <span class="bcp14">MUST</span> be done by removing only the characters from the leading &lt;Reference&gt; tag up to and including the ending &lt;/Reference&gt; tag, preserving all other bytes of SignedInfo unchanged, including any white space or line feeds.<a href="#section-3.2.3-2" class="pilcrow">¶</a></p>
 <p id="section-3.2.3-3">Note: This operation is purely textual and does not require XML parsing beyond locating the tag boundaries.<a href="#section-3.2.3-3" class="pilcrow">¶</a></p>
@@ -1436,7 +1436,7 @@ This ensures that the SignedProperties element, which may contain references to 
 <a href="#section-3.2.4" class="section-number selfRef">3.2.4. </a><a href="#name-jws-binding" class="section-name selfRef">JWS Binding</a>
           </h4>
 <p id="section-3.2.4-1">Identifier: "jws"<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.4-2">For JSON Web Signatures (JWS) <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>, the dataTbsHash value is computed over the payload only.
+<p id="section-3.2.4-2">For JSON Web Signatures (JWS) <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>, the <code>dataTbsHash</code> value is computed over the payload only.
 The protected header and any unprotected header parameters <span class="bcp14">MUST NOT</span> be included in the hash calculation.<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
 <p id="section-3.2.4-3">This exclusion avoids circular dependencies where certificate data may appear in the protected header.<a href="#section-3.2.4-3" class="pilcrow">¶</a></p>
 </section>
@@ -1447,7 +1447,7 @@ The protected header and any unprotected header parameters <span class="bcp14">M
 <a href="#section-3.2.5" class="section-number selfRef">3.2.5. </a><a href="#name-cose-binding" class="section-name selfRef">COSE Binding</a>
           </h4>
 <p id="section-3.2.5-1">Identifier: "cose"<a href="#section-3.2.5-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.5-2">For COSE signatures <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span>, the dataTbsHash value is computed over the payload only.
+<p id="section-3.2.5-2">For COSE signatures <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span>, the <code>dataTbsHash</code> value is computed over the payload only.
 The protected header and any unprotected header parameters <span class="bcp14">MUST NOT</span> be included in the hash calculation.<a href="#section-3.2.5-2" class="pilcrow">¶</a></p>
 <p id="section-3.2.5-3">This exclusion avoids circular dependencies where certificate data may appear in the protected header.<a href="#section-3.2.5-3" class="pilcrow">¶</a></p>
 </section>
