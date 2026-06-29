@@ -8,7 +8,7 @@
 <meta content="Stefan Santesson" name="author">
 <meta content="Russ Housley" name="author">
 <meta content="
-       This document defines a profile for certificates that are issued for validation of the digital signature produced by a single signing operation. Each certificate is created at the time of signing and bound to the signed content. The associated signing key is generated, used to produce a single digital signature, and then immediately destroyed. The certificate never expires and is never revoked, which simplifies long-term validation. 
+       This document defines the signedDocumentBinding certificate extension, which binds a certificate to the signed content of a digital signature produced by a single signing operation. Each certificate is created at the time of signing and the associated signing key is generated, used to produce a single digital signature, and then immediately destroyed. Certificates carrying this extension are intended to be issued without a revocation mechanism and with no expiration, which simplifies long-term validation. 
     " name="description">
 <meta content="xml2rfc 3.34.0" name="generator">
 <meta content="certificate" name="keyword">
@@ -1086,7 +1086,7 @@ svg {
 <h1 id="title">One Signature Certificates</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document defines a profile for certificates that are issued for validation of the digital signature produced by a single signing operation. Each certificate is created at the time of signing and bound to the signed content. The associated signing key is generated, used to produce a single digital signature, and then immediately destroyed. The certificate never expires and is never revoked, which simplifies long-term validation.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document defines the signedDocumentBinding certificate extension, which binds a certificate to the signed content of a digital signature produced by a single signing operation. Each certificate is created at the time of signing and the associated signing key is generated, used to produce a single digital signature, and then immediately destroyed. Certificates carrying this extension are intended to be issued without a revocation mechanism and with no expiration, which simplifies long-term validation.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1281,18 +1281,16 @@ svg {
 <p id="section-1.1-1">One signature certificates have the following common characteristics:<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.1-2.1">
-            <p id="section-1.1-2.1.1">They never expire;<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.1.1">They are bound to a specific document content;<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-2.2">
-            <p id="section-1.1-2.2.1">They are never revoked;<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.2.1">They assert that the corresponding private key was destroyed immediately after signing; and<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-2.3">
-            <p id="section-1.1-2.3.1">They are bound to a specific document content; and<a href="#section-1.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-1.1-2.4">
-            <p id="section-1.1-2.4.1">They assert that the corresponding private key was destroyed immediately after signing.<a href="#section-1.1-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.3.1">They are typically issued without a revocation mechanism and with no expiration.<a href="#section-1.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
+<p id="section-1.1-3">The document binding is carried by the signedDocumentBinding extension defined in this document and is the signal that identifies a certificate as a one signature certificate. The absence of revocation and expiration are recommended properties; a verifier determines whether they apply to a given certificate by inspecting the relevant certificate fields.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
 <div id="revocation">
 <section id="section-1.1.1">
           <h4 id="name-revocation">
@@ -1301,8 +1299,8 @@ svg {
 <p id="section-1.1.1-1">Traditional certificates that are re-used over time have many legitimate reasons for revocation, such as if the private key is lost or compromised. This can lead to large volumes of revocation data.<a href="#section-1.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-1.1.1-2">The fact that the same key is used many times exposes the key for the risks of loss, unauthorized usage, or theft. When many objects are signed with the same private key, the risk of exposure and the number of affected signed documents upon revocation increases, unless properly timestamped and properly verified.<a href="#section-1.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-1.1.1-3">When a signing key is used only once, that risk of exposure is greatly reduced, and it has been shown that most usages of dedicated private keys and certificates no longer require revocation.<a href="#section-1.1.1-3" class="pilcrow">¶</a></p>
-<p id="section-1.1.1-4">The CA can readily attest that a certain procedure was followed when the certificate was issued. As a matter of policy, the certificate itself is an attestation that the CP and CPS <span>[<a href="#RFC3647" class="cite xref">RFC3647</a>]</span> were followed successfully when the signature was created. Certificates issued according to this profile therefore only attest to the validity at the time of issuance and signing, rather than a retroactive state at the time of validation. This profile is intended for those applications where this declaration of validity is relevant and useful.<a href="#section-1.1.1-4" class="pilcrow">¶</a></p>
-<p id="section-1.1.1-5">Applications that require traditional revocation checking that provides the state at the time of validation <span class="bcp14">MUST NOT</span> use this profile.<a href="#section-1.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-1.1.1-4">The CA can readily attest that a certain procedure was followed when the certificate was issued. As a matter of policy, the certificate itself is an attestation that the CP and CPS <span>[<a href="#RFC3647" class="cite xref">RFC3647</a>]</span> were followed successfully when the signature was created. A certificate issued without a revocation mechanism therefore only attests to the validity at the time of issuance and signing, rather than a retroactive state at the time of validation. This specification is intended for those applications where this declaration of validity is relevant and useful, and it is for this reason that one signature certificates are <span class="bcp14">RECOMMENDED</span> to be issued without revocation.<a href="#section-1.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-1.1.1-5">Applications that require traditional revocation checking that provides the state at the time of validation are not served by an unrevocable certificate, and a CA <span class="bcp14">SHOULD NOT</span> issue one signature certificates without revocation for such applications.<a href="#section-1.1.1-5" class="pilcrow">¶</a></p>
 <p id="section-1.1.1-6">An example usage where this is useful is in services where the signed document is stored as an internal evidence record, such as when a Tax agency allows citizens to sign their tax declarations. This record is then pulled out and used only in case of a dispute where the identified signer challenges the signature. A revocation service is less likely to contribute to this process. If the challenge is successful, the signed document will be removed without affecting any other signed documents in the archive.<a href="#section-1.1.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1322,8 +1320,8 @@ svg {
 </li>
           </ul>
 <p id="section-1.1.2-4">In addition, when a certificate repository is available, renewal of the CA certificate can preserve the ability to validate the infinite validity end enitiy certificate.<a href="#section-1.1.2-4" class="pilcrow">¶</a></p>
-<p id="section-1.1.2-5">This profile assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation <span class="bcp14">MAY</span> require additional trust provisioning by the verifier.<a href="#section-1.1.2-5" class="pilcrow">¶</a></p>
-<p id="section-1.1.2-6">Mechanisms for establishing trust in a CA beyond their certificate validity period are outside the scope of this profile.<a href="#section-1.1.2-6" class="pilcrow">¶</a></p>
+<p id="section-1.1.2-5">This specification assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation <span class="bcp14">MAY</span> require additional trust provisioning by the verifier.<a href="#section-1.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-1.1.2-6">Mechanisms for establishing trust in a CA beyond their certificate validity period are outside the scope of this specification.<a href="#section-1.1.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1346,10 +1344,11 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-certificate-content">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-certificate-content" class="section-name selfRef">Certificate content</a>
       </h2>
-<p id="section-3-1">Conforming certificates <span class="bcp14">SHALL</span> meet all requirements of this section.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">Certificates <span class="bcp14">MUST</span> indicate that a certificate has no well-defined expiration date by setting the notAfter field to the GeneralizedTime value 99991231235959Z, as defined in <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>.<a href="#section-3-2" class="pilcrow">¶</a></p>
-<p id="section-3-3">Certificates <span class="bcp14">MUST</span> include the id-ce-noRevAvail extension in compliance with <span>[<a href="#RFC9608" class="cite xref">RFC9608</a>]</span>, indicating that this certificate is not supported by any revocation mechanism.<a href="#section-3-3" class="pilcrow">¶</a></p>
-<p id="section-3-4">Certificates <span class="bcp14">MUST</span> include the signedDocumentBinding extension, binding the certificate to a specific signed content.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-1">This document defines the signedDocumentBinding extension, which a CA includes in a certificate to bind that certificate to a specific signed content. The presence of this extension is the signal by which a relying party recognizes a certificate as a one signature certificate.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">A certificate that includes the signedDocumentBinding extension <span class="bcp14">SHOULD</span> also be issued with the properties described below, which together provide the simplified long-term validation that motivates this document.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">Such a certificate <span class="bcp14">SHOULD</span> indicate that it has no well-defined expiration date by setting the notAfter field to the GeneralizedTime value 99991231235959Z, as defined in <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">Such a certificate <span class="bcp14">SHOULD</span> include the id-ce-noRevAvail extension in compliance with <span>[<a href="#RFC9608" class="cite xref">RFC9608</a>]</span>, indicating that the certificate is not supported by any revocation mechanism.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">A verifier <span class="bcp14">MUST</span> determine whether these properties apply by inspecting the notAfter field and the presence of the id-ce-noRevAvail extension.<a href="#section-3-5" class="pilcrow">¶</a></p>
 <div id="the-signeddocumentbinding-extension">
 <section id="section-3.1">
         <h3 id="name-the-signeddocumentbinding-e">
@@ -1515,7 +1514,7 @@ The protected header and any unprotected header parameters <span class="bcp14">M
         <h3 id="name-certificates-without-revoca">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-certificates-without-revoca" class="section-name selfRef">Certificates Without Revocation</a>
         </h3>
-<p id="section-5.1-1">Certificates conforming to this profile include the id-ce-noRevAvail extension and therefore do not provide any revocation mechanism. Such certificates attest only to the state of trust and correctness of procedures at the time of issuance.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">One signature certificates are intended for use with the id-ce-noRevAvail extension and no revocation mechanism. Such certificates attest only to the state of trust and correctness of procedures at the time of issuance. A verifier cannot infer this property from the signedDocumentBinding extension alone and determines it by inspecting the certificate for the id-ce-noRevAvail extension.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">The Security considerations in <span>[<a href="#RFC9608" class="cite xref">RFC9608</a>]</span> also applies to this document.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1526,7 +1525,7 @@ The protected header and any unprotected header parameters <span class="bcp14">M
         </h3>
 <p id="section-5.2-1">The signedDocumentBinding extension binds the certificate to specific signed content by including a hash of the data to be signed. Verification of this binding is not required for successful cryptographic validation of the signature. A signature can therefore validate correctly even if the binding is not checked.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">However, a relying party <span class="bcp14">SHOULD</span> verify that the signed content matches the dataTbsHash value in the signedDocumentBinding extension. Performing this check ensures that the certificate is used only with the content for which it was issued and enforces the intended scope of the certificate.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3">The security model of this profile states that the associated private key is generated for, and used in, exactly one signing operation and is then destroyed. This property holds independently of whether the binding is verified by the relying party. Nevertheless, failure to verify the binding weakens the protections provided by this profile and increases the risk of certificate substitution or unintended certificate reuse.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">The security model of this specification states that the associated private key is generated for, and used in, exactly one signing operation and is then destroyed. This property holds independently of whether the binding is verified by the relying party. Nevertheless, failure to verify the binding weakens the protections provided by this specification and increases the risk of certificate substitution or unintended certificate reuse.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 <p id="section-5.2-4">When verified, the signedDocumentBinding extension provides an additional safeguard against the use of the certificate for any signature other than the one for which it was issued.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
