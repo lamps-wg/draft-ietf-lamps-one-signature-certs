@@ -1290,7 +1290,7 @@ svg {
             <p id="section-1.1-2.3.1">They are typically issued without a revocation mechanism and with no expiration.<a href="#section-1.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-1.1-3">The document binding is carried by the signedDocumentBinding extension defined in this document and is the signal that identifies a certificate as a one signature certificate. The absence of revocation and expiration are recommended properties; a verifier determines whether they apply to a given certificate by inspecting the relevant certificate fields.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+<p id="section-1.1-3">The signedDocumentBinding extension indes the public key in the certificate to verifying the signature for the single identified document. When this extension is present, it is <span class="bcp14">RECOMMENDED</span> that the certificate not expire (notAfter is set to the GeneralizedTime value of 99991231235959Z) and the noRevAvail certificate extension <span>[<a href="#RFC9608" class="cite xref">RFC9608</a>]</span> is also present to indicate that no revocation information is available for this certificate.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
 <div id="revocation">
 <section id="section-1.1.1">
           <h4 id="name-revocation">
