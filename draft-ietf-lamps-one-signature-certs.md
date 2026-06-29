@@ -189,7 +189,7 @@ The signedDocumentBinding extension binds a certificate to a specific signed con
 
 
     name           id-pe-signedDocumentBinding
-    OID            { id-pe TBD }
+    OID            { id-pe 37 }
     syntax         SignedDocumentBinding
     criticality    SHOULD be FALSE
 
@@ -304,7 +304,7 @@ This exclusion avoids circular dependencies where certificate data may appear in
 
        -- signedDocumentBinding Certificate Extension OID
 
-       id-pe-signedDocumentBinding OBJECT IDENTIFIER ::= { id-pe TBD }
+       id-pe-signedDocumentBinding OBJECT IDENTIFIER ::= { id-pe 37 }
 
        END
      <CODE ENDS>
