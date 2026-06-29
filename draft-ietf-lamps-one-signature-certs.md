@@ -202,29 +202,29 @@ The signedDocumentBinding extension binds a certificate to a specific signed con
     bindingType     UTF8String OPTIONAL }
 
 
-The dataTbsHash field MUST contain a hash of the data to be signed.
+The `dataTbsHash` field MUST contain a hash of the data to be signed.
 
-The hashAlg field MUST contain the AlgorithmIdentifier of the hash algorithm used to generate the dataTbsHash value.
+The `hashAlg` field MUST contain the AlgorithmIdentifier of the hash algorithm used to generate the `dataTbsHash` value.
 
-The bindingType field MAY contain an identifier that specifies how the data to be signed is derived from the digital object to be signed.
+The `bindingType` field MAY contain an identifier that specifies how the data to be signed is derived from the digital object to be signed.
 
 Adding this extension to a certificate is a statement by the CA that the signing key is generated exclusively for the purpose of signing the document bound by this extension, and that the signing key is destroyed after signing. The details for this procedure and how the destruction of the signing key is assured SHOULD be outlined in the certificate policy {{RFC3647}} of the issued certificate.
 
 ## Defined bindingType identifiers
 
-The bindingType field defines how the data to be signed (dataTbsHash) is derived from the signed document.
+The `bindingType` field defines how the data to be signed (`dataTbsHash`) is derived from the signed document.
 This field identifies a deterministic procedure for selecting the portion of the signed content that is included in the hash computation.
 When the field is omitted, the rules for the default binding type apply.
 
-The purpose of the dataTbsHash value is to bind the certificate to the document being signed in order to prevent re-use of the signing key for multiple signed documents. This enforces the contract that the signing key is used only once for creation of one signature only. Validators SHOULD verify that the signed document matches the certificate’s binding information.
+The purpose of the `dataTbsHash` value is to bind the certificate to the document being signed in order to prevent re-use of the signing key for multiple signed documents. This enforces the contract that the signing key is used only once for creation of one signature only. Validators SHOULD verify that the signed document matches the certificate’s binding information.
 This verification is not required for the signature to validate successfully but provides an additional safeguard against misuse or substitution of certificates.
 
-This document defines a set of bindingType identifiers. Additional bindingType identifiers MAY be defined by future specifications.
+This document defines a set of `bindingType` identifiers. Additional `bindingType` identifiers MAY be defined by future specifications.
 
 ### Default Binding
 
-When the bindingType is absent, the default binding applies.
-In this case, the dataTbsHash value is the hash of the exact data that is signed by the signature format in use.
+When the `bindingType` is absent, the default binding applies.
+In this case, the `dataTbsHash` value is the hash of the exact data that is signed by the signature format in use.
 
 Examples include:
 
@@ -232,22 +232,22 @@ Examples include:
 - For CMS Signatures {{RFC5652}}, the DER-encoded SignedAttributes structure.
 - For other formats, the data structure input directly to the signature algorithm.
 
-This bindingType MUST NOT be used when the data to be signed includes either the signer certificate itself or a hash of the signer certificate. This includes JWS and COSE signed documents that can include signer certificates in the protected header. JWS signatures {{RFC7515}} MUST use the "jws" bindingType and COSE signatures {{RFC8152}} MUST use the "cose" binding type.
+This `bindingType` MUST NOT be used when the data to be signed includes either the signer certificate itself or a hash of the signer certificate. This includes JWS and COSE signed documents that can include signer certificates in the protected header. JWS signatures {{RFC7515}} MUST use the "jws" `bindingType` and COSE signatures {{RFC8152}} MUST use the "cose" binding type.
 
 ### CAdES Binding
 
 Identifier: "cades"
 
 For CMS {{RFC5652}} or ETSI CAdES {{CADES}} signatures incorporating SigningCertificate or SigningCertificateV2 attributes {{RFC5035}} in signedAttrs,
-the dataTbsHash value is computed over the DER encoding of SignerInfo excluding any instances of SigningCertificate or SigningCertificateV2 attributes from the SignedAttributes set.
+the `dataTbsHash` value is computed over the DER encoding of SignerInfo excluding any instances of SigningCertificate or SigningCertificateV2 attributes from the SignedAttributes set.
 
-This bindingType also applies to PDF {{ISOPDF2}} and ETSI PAdES {{PADES}} signed documents when applicable due to its use of CMS for signing.
+This `bindingType` also applies to PDF {{ISOPDF2}} and ETSI PAdES {{PADES}} signed documents when applicable due to its use of CMS for signing.
 
 ### XAdES Binding
 
 Identifier: "xades"
 
-For ETSI XML Advanced Electronic Signatures {{XADES}}, the dataTbsHash value is computed over the canonicalized SignedInfo element,
+For ETSI XML Advanced Electronic Signatures {{XADES}}, the `dataTbsHash` value is computed over the canonicalized SignedInfo element,
 with any Reference elements whose Type attribute equals "http://uri.etsi.org/01903#SignedProperties" removed prior to hashing.
 This ensures that the SignedProperties element, which may contain references to the signing certificate, does not create a circular dependency. Extraction of the Reference element MUST be done by removing only the characters from the leading &lt;Reference&gt; tag up to and including the ending &lt;/Reference&gt; tag, preserving all other bytes of SignedInfo unchanged, including any white space or line feeds.
 
@@ -257,7 +257,7 @@ Note: This operation is purely textual and does not require XML parsing beyond l
 
 Identifier: "jws"
 
-For JSON Web Signatures (JWS) {{RFC7515}}, the dataTbsHash value is computed over the payload only.
+For JSON Web Signatures (JWS) {{RFC7515}}, the `dataTbsHash` value is computed over the payload only.
 The protected header and any unprotected header parameters MUST NOT be included in the hash calculation.
 
 This exclusion avoids circular dependencies where certificate data may appear in the protected header.
@@ -266,7 +266,7 @@ This exclusion avoids circular dependencies where certificate data may appear in
 
 Identifier: "cose"
 
-For COSE signatures {{RFC8152}}, the dataTbsHash value is computed over the payload only.
+For COSE signatures {{RFC8152}}, the `dataTbsHash` value is computed over the payload only.
 The protected header and any unprotected header parameters MUST NOT be included in the hash calculation.
 
 This exclusion avoids circular dependencies where certificate data may appear in the protected header.
