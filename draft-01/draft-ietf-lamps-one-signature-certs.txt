@@ -171,10 +171,7 @@ Table of Contents
    successfully when the signature was created.  A certificate issued
    without a revocation mechanism therefore only attests to the validity
    at the time of issuance and signing, rather than a retroactive state
-   at the time of validation.  This specification is intended for those
-   applications where this declaration of validity is relevant and
-   useful, and it is for this reason that one signature certificates are
-   RECOMMENDED to be issued without revocation.
+   at the time of validation.
 
    Applications that require traditional revocation checking that
    provides the state at the time of validation are not served by an
