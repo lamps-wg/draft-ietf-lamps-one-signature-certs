@@ -148,7 +148,7 @@ The fact that the same key is used many times exposes the key for the risks of l
 
 When a signing key is used only once, that risk of exposure is greatly reduced, and it has been shown that most usages of dedicated private keys and certificates no longer require revocation.
 
-The CA can readily attest that a certain procedure was followed when the certificate was issued. As a matter of policy, the certificate itself is an attestation that the CP and CPS {{RFC3647}} were followed successfully when the signature was created. A certificate issued without a revocation mechanism therefore only attests to the validity at the time of issuance and signing, rather than a retroactive state at the time of validation. This specification is intended for those applications where this declaration of validity is relevant and useful, and it is for this reason that one signature certificates are RECOMMENDED to be issued without revocation.
+The CA can readily attest that a certain procedure was followed when the certificate was issued. As a matter of policy, the certificate itself is an attestation that the CP and CPS {{RFC3647}} were followed successfully when the signature was created. A certificate issued without a revocation mechanism therefore only attests to the validity at the time of issuance and signing, rather than a retroactive state at the time of validation.
 
 Applications that require traditional revocation checking that provides the state at the time of validation are not served by an unrevocable certificate, and a CA SHOULD NOT issue one signature certificates without revocation for such applications.
 
