@@ -8,26 +8,27 @@
 <meta content="Stefan Santesson" name="author">
 <meta content="Russ Housley" name="author">
 <meta content="
-       This document defines a profile for certificates that are issued for validation of the digital signature produced by a single signing operation. Each certificate is created at the time of signing and bound to the signed content. The associated signing key is generated, used to produce a single digital signature, and then immediately destroyed. The certificate never expires and is never revoked, which simplifies long-term validation. 
+       This document defines the signedDocumentBinding certificate extension, which binds a certificate to the signed content of a digital signature produced by a single signing operation. Each certificate is created at the time of signing and the associated signing key is generated, used to produce a single digital signature, and then immediately destroyed. Certificates carrying this extension are intended to be issued without a revocation mechanism and with no expiration, which simplifies long-term validation. 
     " name="description">
-<meta content="xml2rfc 3.32.0" name="generator">
+<meta content="xml2rfc 3.34.0" name="generator">
 <meta content="certificate" name="keyword">
 <meta content="signature" name="keyword">
 <meta content="X.509" name="keyword">
 <meta content="draft-ietf-lamps-one-signature-certs-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.32.0
-    Python 3.12.12
-    ConfigArgParse 1.7
+  xml2rfc 3.34.0
+    Python 3.14.5
+    ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 6.0.2
-    platformdirs 4.9.4
+    lxml 6.1.1
+    natsort 8.4.0
+    platformdirs 4.10.0
     pycountry 24.6.1
     PyYAML 6.0.3
-    requests 2.32.5
-    wcwidth 0.6.0
+    requests 2.33.1
+    wcwidth 0.8.1
 -->
 <link href="draft-ietf-lamps-one-signature-certs.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -294,16 +295,19 @@ h1, h2, h3, h4, h5, h6 {
   font-size-adjust: 0.5;
   color: var(--title-color);
 }
-h1#title {
-  font-size: 32px;
-  line-height: 40px;
-  clear: both;
-}
-h1#title, h1#rfcnum {
-  margin: 1.5em 0 0.2em;
-}
-h1#rfcnum + h1#title {
-  margin: 0.2em 0;
+h1 {
+  &#title {
+    font-size: 32px;
+    line-height: 40px;
+    clear: both;
+    margin: 1.5em 0 0.2em;
+  }
+  &#rfcnum {
+    margin: 1.5em 0 0.2em;
+    & + h1#title {
+      margin: 0.2em 0;
+    }
+  }
 }
 
 h1, h2, h3 {
@@ -323,10 +327,10 @@ h4, h5, h6 {
 #abstract+p {
   font-size: 18px;
   line-height: 24px;
-}
-#abstract+p code, #abstract+p samp, #abstract+p tt {
-  font-size: 16px;
-  line-height: 0;
+  & code, & samp, & tt {
+    font-size: 16px;
+    line-height: 0;
+  }
 }
 
 p {
@@ -337,59 +341,59 @@ p {
 div {
   margin: 0;
 }
-.alignRight.art-text {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
-  padding: 0.5em 1em 0;
-  margin-bottom: 0.5em;
-}
-.alignRight.art-text pre {
-  padding: 0;
-  width: auto;
-}
 .alignRight {
   margin: 1em 0;
-}
-.alignRight > *:first-child {
-  border: none;
-  margin: 0;
-  float: right;
-  clear: both;
-}
-.alignRight > *:nth-child(2) {
-  clear: both;
-  display: block;
-  border: none;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    margin: 0;
+    float: right;
+    clear: both;
+  }
+  & > *:nth-child(2) {
+    clear: both;
+    display: block;
+    border: none;
+  }
 }
 svg {
   display: block;
-}
-/* font-family isn't space-separated, but =~ will have to do */
-svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
-  font-family: var(--font-mono);
-}
-.alignCenter.art-text {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
-  padding: 0.5em 1em 0;
-  margin-bottom: 0.5em;
-}
-.alignCenter.art-text pre {
-  padding: 0;
-  width: auto;
+  /* font-family isn't space-separated, but =~ will have to do */
+  &[font-family~="monospace" i], & [font-family~="monospace" i] {
+    font-family: var(--font-mono);
+  }
 }
 .alignCenter {
   margin: 1em 0;
-}
-.alignCenter > *:first-child {
-  border: none;
-  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
-     support flexbox yet.
-  */
-  display: table;
-  margin: 0 auto;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+       support flexbox yet.
+    */
+    display: table;
+    margin: 0 auto;
+  }
 }
 
 /* lists */
@@ -427,26 +431,25 @@ dl {
     --indent: 5ch;
     & > dt {
       min-width: calc(var(--indent) - 2ch);
+      float: none;
     }
-  }
-  &.olPercent > dt {
-    float: none;
   }
 
   dl > dd > & {
     margin-top: 0.5em;
     margin-bottom: 0;
   }
-}
-dl:not(.dlNewline) > dt {
-  float: left;
-  margin-right: 2ch;
-  min-width: 8ch;
-}
-dl > dd {
-  margin-bottom: .8em;
-  margin-left: var(--indent) !important; /* stupid element overrides */
-  min-height: 2ex;
+
+  &:not(.dlNewline) > dt {
+    float: left;
+    margin-right: 2ch;
+    min-width: 8ch;
+  }
+  & > dd {
+    margin-bottom: .8em;
+    margin-left: var(--indent) !important; /* stupid element overrides */
+    min-height: 2ex;
+  }
 }
 :is(dl.compact, .dlCompact) > dd {
   margin-bottom: 0;
@@ -462,20 +465,22 @@ dl > dd {
 }
 
 /* links */
-a, a[href].selfRef:hover {
+a {
   text-decoration: none;
+  &[href] {
+    color: var(--link-color);
+    &:hover { text-decoration: underline; }
+    &.selfRef {
+      color: var(--text-color);
+      &:hover {
+        text-decoration: none;
+        background-color: var(--highlight-color);
+      }
+    }
+  }
 }
-a[href] {
-  color: var(--link-color);
-}
-a[href].selfRef, .iref + a[href].internal {
+.iref + a[href].internal {
   color: var(--text-color);
-}
-a[href]:hover {
-  text-decoration: underline;
-}
-a[href].selfRef:hover {
-  background-color: var(--highlight-color);
 }
 a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
   white-space: nowrap;
@@ -511,9 +516,9 @@ img {
 figure {
   margin: 0.5em 0;
   padding: 0;
-}
-figure blockquote {
-  margin: 0.8em 0.4em 0.4em;
+  & blockquote {
+    margin: 0.8em 0.4em 0.4em;
+  }
 }
 figcaption, caption {
   font-style: italic;
@@ -523,17 +528,19 @@ figcaption, caption {
 }
 @media screen {
   /* Auto-collapse boilerplate. */
-  :is(#status-of-memo, #copyright) p {
-    margin: -2px 0;
-    max-height: 0;
-    transition: max-height 2s ease, margin 0.5s ease 0.5s;
-    overflow: hidden;
-  }
-  :is(#status-of-memo, #copyright):hover p,
-  :is(#status-of-memo, #copyright) h2:target ~ p {
-    margin: 0.5em 0;
-    max-height: 500px;
-    overflow: auto;
+  :is(#status-of-memo, #copyright) {
+    & p {
+      margin: -2px 0;
+      max-height: 0;
+      transition: max-height 2s ease, margin 0.5s ease 0.5s;
+      overflow: hidden;
+    }
+    &:hover p,
+    & h2:target ~ p {
+      margin: 0.5em 0;
+      max-height: 500px;
+      overflow: auto;
+    }
   }
   pre, svg {
     display: inline-block;
@@ -583,25 +590,17 @@ table {
   max-width: 100%;
   margin: 0 0 1em;
   border-collapse: collapse;
-}
-table.right {
-  margin-left: auto;
-}
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-table.left {
-  margin-right: auto;
-}
-table .text-left {
-  text-align: left;
-}
-table .text-center {
-  text-align: center;
-}
-table .text-right {
-  text-align: right;
+  &.right { margin-left: auto; }
+  &.center { margin-left: auto; margin-right: auto; }
+  &.left { margin-right: auto; }
+  & .text-left { text-align: left; }
+  & .text-center { text-align: center; }
+  & .text-right { text-align: right; }
+  & caption {
+    margin: 0;
+    padding: 3px 0 3px 1em;
+  }
+  & p { margin: 0; }
 }
 
 thead, tbody {
@@ -621,13 +620,6 @@ th {
 :is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
   background-color: var(--highlight-color);
 }
-table caption {
-  margin: 0;
-  padding: 3px 0 3px 1em;
-}
-table p {
-  margin: 0;
-}
 
 /* pilcrow */
 a.pilcrow {
@@ -638,18 +630,16 @@ a.pilcrow {
     color: var(--pilcrow-weak);
     &:hover { text-decoration: none; }
   }
-}
-@media not print {
-  :hover > a.pilcrow, a.pilcrow:focus {
-    opacity: 1;
+  @media not print {
+    :hover > &, &:focus {
+      opacity: 1;
+    }
+    &[href]:hover {
+      color: var(--pilcrow-strong);
+      background-color: transparent;
+    }
   }
-  a.pilcrow[href]:hover {
-    color: var(--pilcrow-strong);
-    background-color: transparent;
-  }
-}
-@media print {
-  a.pilcrow {
+  @media print {
     display: none;
   }
 }
@@ -708,9 +698,9 @@ sub, sup {
   font-size: 0.9em;
   font-style: italic;
   margin-top: 2em;
-}
-.docInfo .prepared {
-  float: right;
+  & .prepared {
+    float: right;
+  }
 }
 
 /* table of contents */
@@ -800,23 +790,27 @@ hr.addr {
   max-width: calc(100% - 16px);
 }
 @media (min-width: 500px) {
-  #authors-addresses > section {
-    column-count: 2;
-    column-gap: 20px;
-  }
-  #authors-addresses > section > h2 {
-    column-span: all;
-  }
-  /* hack for break-inside: avoid-column */
-  #authors-addresses address {
-    display: inline-block;
-    break-inside: avoid-column;
+  #authors-addresses {
+    & > section {
+      column-count: 2;
+      column-gap: 20px;
+    }
+    & > section > h2 {
+      column-span: all;
+    }
+    /* hack for break-inside: avoid-column */
+    & address {
+      display: inline-block;
+      break-inside: avoid-column;
+    }
   }
 }
 
 /* Comments */
-.rfcEditorRemove p:first-of-type {
-  font-style: italic;
+.rfcEditorRemove {
+  & p:first-of-type {
+    font-style: italic;
+  }
 }
 .cref {
   background-color: rgba(249, 232, 105, 0.3);
@@ -827,19 +821,21 @@ hr.addr {
 }
 
 @media screen {
-  #toc nav {
-    font-family: var(--font-title);
-    font-weight: 360;
-    & > ul { margin-bottom: 2em; }
-    & ul {
-      margin: 0 0 0 4px;
-      & :is(p, li) {
-        margin: 2px 0;
+  #toc {
+    & nav {
+      font-family: var(--font-title);
+      font-weight: 360;
+      & > ul { margin-bottom: 2em; }
+      & ul {
+        margin: 0 0 0 4px;
+        & :is(p, li) {
+          margin: 2px 0;
+        }
       }
     }
-  }
-  #toc a.toplink {
-    float: right;
+    & a.toplink {
+      float: right;
+    }
   }
 }
 @media not screen {
@@ -860,54 +856,54 @@ hr.addr {
     margin: 0;
     border-bottom: 1px solid #ccc;
     opacity: 0.6;
-  }
-  #toc h2 {
-    margin: 0;
-    padding: 2px 0 2px 6px;
-    padding-right: 1em;
-    font-size: 18px;
-    line-height: 24px;
-    min-width: 190px;
-    text-align: right;
-    background-color: #444;
-    color: white;
-    cursor: pointer;
-    &::before { /* css hamburger */
-      float: right;
-      position: relative;
-      width: 1em;
-      height: 1px;
-      left: -164px;
-      margin: 8px 0 0 0;
-      background: white none repeat scroll 0 0;
-      box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
-      content: "";
+    & h2 {
+      margin: 0;
+      padding: 2px 0 2px 6px;
+      padding-right: 1em;
+      font-size: 18px;
+      line-height: 24px;
+      min-width: 190px;
+      text-align: right;
+      background-color: #444;
+      color: white;
+      cursor: pointer;
+      &::before { /* css hamburger */
+        float: right;
+        position: relative;
+        width: 1em;
+        height: 1px;
+        left: -164px;
+        margin: 8px 0 0 0;
+        background: white none repeat scroll 0 0;
+        box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+        content: "";
+      }
     }
-  }
-  #toc nav {
-    display: none;
-    background-color: var(--background-color);
-    padding: 0.5em 1em 1em;
-    overflow: auto;
-    overscroll-behavior: contain;
-    height: calc(100vh - 48px);
-    border-left: 1px solid #ddd;
-  }
-  #toc.active {
-    opacity: 1;
-    & nav { display: block; }
-  }
-  /* Make the collapsed ToC header render white on gray also when it's a link */
-  #toc h2 a,
-  #toc h2 a:is(:link, :focus, :hover),
-  #toc a.toplink,
-  #toc a.toplink:hover {
-    color: white;
-    background-color: #444;
-    text-decoration: none;
-  }
-  #toc a.toplink {
-    margin: 2px 0.5em 0;
+    & nav {
+      display: none;
+      background-color: var(--background-color);
+      padding: 0.5em 1em 1em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      height: calc(100vh - 48px);
+      border-left: 1px solid #ddd;
+    }
+    &.active {
+      opacity: 1;
+      & nav { display: block; }
+    }
+    /* Make the collapsed ToC header render white on gray also when it's a link */
+    & h2 a,
+    & h2 a:is(:link, :focus, :hover),
+    & a.toplink,
+    & a.toplink:hover {
+      color: white;
+      background-color: #444;
+      text-decoration: none;
+    }
+    & a.toplink {
+      margin: 2px 0.5em 0;
+    }
   }
 }
 
@@ -926,26 +922,26 @@ hr.addr {
     margin: 0;
     padding: 0;
     z-index: 1;
-  }
-  #toc h2 {
-    margin: 0;
-    padding: 0.25em 1em 1em 0;
-  }
-  #toc nav {
-    display: block;
-    height: calc(90vh - 84px);
-    bottom: 0;
-    padding: 0.5em 0 2em;
-    overflow: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
+    & h2 {
+      margin: 0;
+      padding: 0.25em 1em 1em 0;
+    }
+    & nav {
+      display: block;
+      height: calc(90vh - 84px);
+      bottom: 0;
+      padding: 0.5em 0 2em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+    & a.toplink {
+      margin: 8px 0.5em 0;
+    }
   }
   img { /* future proofing */
     max-width: 100%;
     height: auto;
-  }
-  #toc a.toplink {
-    margin: 8px 0.5em 0;
   }
 }
 
@@ -961,12 +957,13 @@ hr.addr {
   #n-copyright-notice {
     border-bottom: none;
   }
-  #toc, #n-introduction {
-    page-break-before: always;
-  }
   #toc {
+    page-break-before: always;
     border-top: none;
     padding-top: 0;
+  }
+  #n-introduction {
+    page-break-before: always;
   }
   figure, pre, .vcard {
     page-break-inside: avoid;
@@ -1028,17 +1025,19 @@ hr.addr {
 }
 
 /* SVG Trick: a prefix match works because only black and white are allowed */
-svg :is([stroke="black"], [stroke^="#000"]) {
-  stroke: var(--text-color);
-}
-svg :is([stroke="white"], [stroke^="#fff"]) {
-  stroke: var(--background-color);
-}
-svg :is([fill="black"], [fill^="#000"], :not([fill])) {
-  fill: var(--text-color);
-}
-svg :is([fill="white"], [fill^="#fff"]) {
-  fill: var(--background-color);
+svg {
+  & :is([stroke="black"], [stroke^="#000"]) {
+    stroke: var(--text-color);
+  }
+  & :is([stroke="white"], [stroke^="#fff"]) {
+    stroke: var(--background-color);
+  }
+  & :is([fill="black"], [fill^="#000"], :not([fill])) {
+    fill: var(--text-color);
+  }
+  & :is([fill="white"], [fill^="#fff"]) {
+    fill: var(--background-color);
+  }
 }
 </style>
 
@@ -1087,7 +1086,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">One Signature Certificates</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document defines a profile for certificates that are issued for validation of the digital signature produced by a single signing operation. Each certificate is created at the time of signing and bound to the signed content. The associated signing key is generated, used to produce a single digital signature, and then immediately destroyed. The certificate never expires and is never revoked, which simplifies long-term validation.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document defines the signedDocumentBinding certificate extension, which binds a certificate to the signed content of a digital signature produced by a single signing operation. Each certificate is created at the time of signing and the associated signing key is generated, used to produce a single digital signature, and then immediately destroyed. Certificates carrying this extension are intended to be issued without a revocation mechanism and with no expiration, which simplifies long-term validation.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1282,18 +1281,16 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1.1-1">One signature certificates have the following common characteristics:<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.1-2.1">
-            <p id="section-1.1-2.1.1">They never expire;<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.1.1">They are bound to a specific document content;<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-2.2">
-            <p id="section-1.1-2.2.1">They are never revoked;<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.2.1">They assert that the corresponding private key was destroyed immediately after signing; and<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-2.3">
-            <p id="section-1.1-2.3.1">They are bound to a specific document content; and<a href="#section-1.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-1.1-2.4">
-            <p id="section-1.1-2.4.1">They assert that the corresponding private key was destroyed immediately after signing.<a href="#section-1.1-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-2.3.1">They are typically issued without a revocation mechanism and with no expiration.<a href="#section-1.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
+<p id="section-1.1-3">The signedDocumentBinding extension indes the public key in the certificate to verifying the signature for the single identified document. When this extension is present, it is <span class="bcp14">RECOMMENDED</span> that the certificate not expire (notAfter is set to the GeneralizedTime value of 99991231235959Z) and the noRevAvail certificate extension <span>[<a href="#RFC9608" class="cite xref">RFC9608</a>]</span> is also present to indicate that no revocation information is available for this certificate.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
 <div id="revocation">
 <section id="section-1.1.1">
           <h4 id="name-revocation">
@@ -1302,8 +1299,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1.1.1-1">Traditional certificates that are re-used over time have many legitimate reasons for revocation, such as if the private key is lost or compromised. This can lead to large volumes of revocation data.<a href="#section-1.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-1.1.1-2">The fact that the same key is used many times exposes the key for the risks of loss, unauthorized usage, or theft. When many objects are signed with the same private key, the risk of exposure and the number of affected signed documents upon revocation increases, unless properly timestamped and properly verified.<a href="#section-1.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-1.1.1-3">When a signing key is used only once, that risk of exposure is greatly reduced, and it has been shown that most usages of dedicated private keys and certificates no longer require revocation.<a href="#section-1.1.1-3" class="pilcrow">¶</a></p>
-<p id="section-1.1.1-4">The CA can readily attest that a certain procedure was followed when the certificate was issued. As a matter of policy, the certificate itself is an attestation that the CP and CPS <span>[<a href="#RFC3647" class="cite xref">RFC3647</a>]</span> were followed successfully when the signature was created. Certificates issued according to this profile therefore only attest to the validity at the time of issuance and signing, rather than a retroactive state at the time of validation. This profile is intended for those applications where this declaration of validity is relevant and useful.<a href="#section-1.1.1-4" class="pilcrow">¶</a></p>
-<p id="section-1.1.1-5">Applications that require traditional revocation checking that provides the state at the time of validation <span class="bcp14">MUST NOT</span> use this profile.<a href="#section-1.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-1.1.1-4">The CA can readily attest that a certain procedure was followed when the certificate was issued. As a matter of policy, the certificate itself is an attestation that the CP and CPS <span>[<a href="#RFC3647" class="cite xref">RFC3647</a>]</span> were followed successfully when the signature was created. A certificate issued without a revocation mechanism therefore only attests to the validity at the time of issuance and signing, rather than a retroactive state at the time of validation.<a href="#section-1.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-1.1.1-5">Applications that require traditional revocation checking that provides the state at the time of validation are not served by an unrevocable certificate, and a CA <span class="bcp14">SHOULD NOT</span> issue one signature certificates without revocation for such applications.<a href="#section-1.1.1-5" class="pilcrow">¶</a></p>
 <p id="section-1.1.1-6">An example usage where this is useful is in services where the signed document is stored as an internal evidence record, such as when a Tax agency allows citizens to sign their tax declarations. This record is then pulled out and used only in case of a dispute where the identified signer challenges the signature. A revocation service is less likely to contribute to this process. If the challenge is successful, the signed document will be removed without affecting any other signed documents in the archive.<a href="#section-1.1.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1323,8 +1320,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
           </ul>
 <p id="section-1.1.2-4">In addition, when a certificate repository is available, renewal of the CA certificate can preserve the ability to validate the infinite validity end enitiy certificate.<a href="#section-1.1.2-4" class="pilcrow">¶</a></p>
-<p id="section-1.1.2-5">This profile assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation <span class="bcp14">MAY</span> require additional trust provisioning by the verifier.<a href="#section-1.1.2-5" class="pilcrow">¶</a></p>
-<p id="section-1.1.2-6">Mechanisms for establishing trust in a CA beyond their certificate validity period are outside the scope of this profile.<a href="#section-1.1.2-6" class="pilcrow">¶</a></p>
+<p id="section-1.1.2-5">This specification assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation <span class="bcp14">MAY</span> require additional trust provisioning by the verifier.<a href="#section-1.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-1.1.2-6">Mechanisms for establishing trust in a CA beyond their certificate validity period are outside the scope of this specification.<a href="#section-1.1.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1347,10 +1344,11 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-certificate-content">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-certificate-content" class="section-name selfRef">Certificate content</a>
       </h2>
-<p id="section-3-1">Conforming certificates <span class="bcp14">SHALL</span> meet all requirements of this section.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">Certificates <span class="bcp14">MUST</span> indicate that a certificate has no well-defined expiration date by setting the notAfter field to the GeneralizedTime value 99991231235959Z, as defined in <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>.<a href="#section-3-2" class="pilcrow">¶</a></p>
-<p id="section-3-3">Certificates <span class="bcp14">MUST</span> include the id-ce-noRevAvail extension in compliance with <span>[<a href="#RFC9608" class="cite xref">RFC9608</a>]</span>, indicating that this certificate is not supported by any revocation mechanism.<a href="#section-3-3" class="pilcrow">¶</a></p>
-<p id="section-3-4">Certificates <span class="bcp14">MUST</span> include the signedDocumentBinding extension, binding the certificate to a specific signed content.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-1">This document defines the signedDocumentBinding extension, which a CA includes in a certificate to bind that certificate to a specific signed content. The presence of this extension is the signal by which a relying party recognizes a certificate as a one signature certificate.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">A certificate that includes the signedDocumentBinding extension <span class="bcp14">SHOULD</span> also be issued with the properties described below, which together provide the simplified long-term validation that motivates this document.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">Such a certificate <span class="bcp14">SHOULD</span> indicate that it has no well-defined expiration date by setting the notAfter field to the GeneralizedTime value 99991231235959Z, as defined in <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">Such a certificate <span class="bcp14">SHOULD</span> include the id-ce-noRevAvail extension in compliance with <span>[<a href="#RFC9608" class="cite xref">RFC9608</a>]</span>, indicating that the certificate is not supported by any revocation mechanism.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">A verifier <span class="bcp14">MUST</span> determine whether these properties apply by inspecting the notAfter field and the presence of the id-ce-noRevAvail extension.<a href="#section-3-5" class="pilcrow">¶</a></p>
 <div id="the-signeddocumentbinding-extension">
 <section id="section-3.1">
         <h3 id="name-the-signeddocumentbinding-e">
@@ -1360,7 +1358,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <div class="alignLeft art-text artwork" id="section-3.1-2">
 <pre>
 name           id-pe-signedDocumentBinding
-OID            { id-pe TBD }
+OID            { id-pe 37 }
 syntax         SignedDocumentBinding
 criticality    SHOULD be FALSE
 
@@ -1370,9 +1368,9 @@ hashAlg         DigestAlgorithmIdentifier,
 bindingType     UTF8String OPTIONAL }
 </pre><a href="#section-3.1-2" class="pilcrow">¶</a>
 </div>
-<p id="section-3.1-3">The dataTbsHash field <span class="bcp14">MUST</span> contain a hash of the data to be signed.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1-4">The hashAlg field <span class="bcp14">MUST</span> contain the AlgorithmIdentifier of the hash algorithm used to generate the dataTbsHash value.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.1-5">The bindingType field <span class="bcp14">MAY</span> contain an identifier that specifies how the data to be signed is derived from the digital object to be signed.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">The <code>dataTbsHash</code> field <span class="bcp14">MUST</span> contain a hash of the data to be signed.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">The <code>hashAlg</code> field <span class="bcp14">MUST</span> contain the AlgorithmIdentifier of the hash algorithm used to generate the <code>dataTbsHash</code> value.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">The <code>bindingType</code> field <span class="bcp14">MAY</span> contain an identifier that specifies how the data to be signed is derived from the digital object to be signed.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
 <p id="section-3.1-6">Adding this extension to a certificate is a statement by the CA that the signing key is generated exclusively for the purpose of signing the document bound by this extension, and that the signing key is destroyed after signing. The details for this procedure and how the destruction of the signing key is assured <span class="bcp14">SHOULD</span> be outlined in the certificate policy <span>[<a href="#RFC3647" class="cite xref">RFC3647</a>]</span> of the issued certificate.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1381,19 +1379,19 @@ bindingType     UTF8String OPTIONAL }
         <h3 id="name-defined-bindingtype-identif">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-defined-bindingtype-identif" class="section-name selfRef">Defined bindingType identifiers</a>
         </h3>
-<p id="section-3.2-1">The bindingType field defines how the data to be signed (dataTbsHash) is derived from the signed document.
+<p id="section-3.2-1">The <code>bindingType</code> field defines how the data to be signed (<code>dataTbsHash</code>) is derived from the signed document.
 This field identifies a deterministic procedure for selecting the portion of the signed content that is included in the hash computation.
 When the field is omitted, the rules for the default binding type apply.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">The purpose of the dataTbsHash value is to bind the certificate to the document being signed in order to prevent re-use of the signing key for multiple signed documents. This enforces the contract that the signing key is used only once for creation of one signature only. Validators <span class="bcp14">SHOULD</span> verify that the signed document matches the certificate’s binding information.
+<p id="section-3.2-2">The purpose of the <code>dataTbsHash</code> value is to bind the certificate to the document being signed in order to prevent re-use of the signing key for multiple signed documents. This enforces the contract that the signing key is used only once for creation of one signature only. Validators <span class="bcp14">SHOULD</span> verify that the signed document matches the certificate’s binding information.
 This verification is not required for the signature to validate successfully but provides an additional safeguard against misuse or substitution of certificates.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2-3">This document defines a set of bindingType identifiers. Additional bindingType identifiers <span class="bcp14">MAY</span> be defined by future specifications.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">This document defines a set of <code>bindingType</code> identifiers. Additional <code>bindingType</code> identifiers <span class="bcp14">MAY</span> be defined by future specifications.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 <div id="default-binding">
 <section id="section-3.2.1">
           <h4 id="name-default-binding">
 <a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-default-binding" class="section-name selfRef">Default Binding</a>
           </h4>
-<p id="section-3.2.1-1">When the bindingType is absent, the default binding applies.
-In this case, the dataTbsHash value is the hash of the exact data that is signed by the signature format in use.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-1">When the <code>bindingType</code> is absent, the default binding applies.
+In this case, the <code>dataTbsHash</code> value is the hash of the exact data that is signed by the signature format in use.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.1-2">Examples include:<a href="#section-3.2.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2.1-3.1">
@@ -1406,7 +1404,7 @@ In this case, the dataTbsHash value is the hash of the exact data that is signed
               <p id="section-3.2.1-3.3.1">For other formats, the data structure input directly to the signature algorithm.<a href="#section-3.2.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-3.2.1-4">This bindingType <span class="bcp14">MUST NOT</span> be used when the data to be signed includes either the signer certificate itself or a hash of the signer certificate. This includes JWS and COSE signed documents that can include signer certificates in the protected header. JWS signatures <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span> <span class="bcp14">MUST</span> use the "jws" bindingType and COSE signatures <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span> <span class="bcp14">MUST</span> use the "cose" binding type.<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-4">This <code>bindingType</code> <span class="bcp14">MUST NOT</span> be used when the data to be signed includes either the signer certificate itself or a hash of the signer certificate. This includes JWS and COSE signed documents that can include signer certificates in the protected header. JWS signatures <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span> <span class="bcp14">MUST</span> use the "jws" <code>bindingType</code> and COSE signatures <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span> <span class="bcp14">MUST</span> use the "cose" binding type.<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="cades-binding">
@@ -1416,8 +1414,8 @@ In this case, the dataTbsHash value is the hash of the exact data that is signed
           </h4>
 <p id="section-3.2.2-1">Identifier: "cades"<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.2-2">For CMS <span>[<a href="#RFC5652" class="cite xref">RFC5652</a>]</span> or ETSI CAdES <span>[<a href="#CADES" class="cite xref">CADES</a>]</span> signatures incorporating SigningCertificate or SigningCertificateV2 attributes <span>[<a href="#RFC5035" class="cite xref">RFC5035</a>]</span> in signedAttrs,
-the dataTbsHash value is computed over the DER encoding of SignerInfo excluding any instances of SigningCertificate or SigningCertificateV2 attributes from the SignedAttributes set.<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.2-3">This bindingType also applies to PDF <span>[<a href="#ISOPDF2" class="cite xref">ISOPDF2</a>]</span> and ETSI PAdES <span>[<a href="#PADES" class="cite xref">PADES</a>]</span> signed documents when applicable due to its use of CMS for signing.<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
+the <code>dataTbsHash</code> value is computed over the DER encoding of SignerInfo excluding any instances of SigningCertificate or SigningCertificateV2 attributes from the SignedAttributes set.<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-3">This <code>bindingType</code> also applies to PDF <span>[<a href="#ISOPDF2" class="cite xref">ISOPDF2</a>]</span> and ETSI PAdES <span>[<a href="#PADES" class="cite xref">PADES</a>]</span> signed documents when applicable due to its use of CMS for signing.<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="xades-binding">
@@ -1426,7 +1424,7 @@ the dataTbsHash value is computed over the DER encoding of SignerInfo excluding 
 <a href="#section-3.2.3" class="section-number selfRef">3.2.3. </a><a href="#name-xades-binding" class="section-name selfRef">XAdES Binding</a>
           </h4>
 <p id="section-3.2.3-1">Identifier: "xades"<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.3-2">For ETSI XML Advanced Electronic Signatures <span>[<a href="#XADES" class="cite xref">XADES</a>]</span>, the dataTbsHash value is computed over the canonicalized SignedInfo element,
+<p id="section-3.2.3-2">For ETSI XML Advanced Electronic Signatures <span>[<a href="#XADES" class="cite xref">XADES</a>]</span>, the <code>dataTbsHash</code> value is computed over the canonicalized SignedInfo element,
 with any Reference elements whose Type attribute equals "http://uri.etsi.org/01903#SignedProperties" removed prior to hashing.
 This ensures that the SignedProperties element, which may contain references to the signing certificate, does not create a circular dependency. Extraction of the Reference element <span class="bcp14">MUST</span> be done by removing only the characters from the leading &lt;Reference&gt; tag up to and including the ending &lt;/Reference&gt; tag, preserving all other bytes of SignedInfo unchanged, including any white space or line feeds.<a href="#section-3.2.3-2" class="pilcrow">¶</a></p>
 <p id="section-3.2.3-3">Note: This operation is purely textual and does not require XML parsing beyond locating the tag boundaries.<a href="#section-3.2.3-3" class="pilcrow">¶</a></p>
@@ -1438,7 +1436,7 @@ This ensures that the SignedProperties element, which may contain references to 
 <a href="#section-3.2.4" class="section-number selfRef">3.2.4. </a><a href="#name-jws-binding" class="section-name selfRef">JWS Binding</a>
           </h4>
 <p id="section-3.2.4-1">Identifier: "jws"<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.4-2">For JSON Web Signatures (JWS) <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>, the dataTbsHash value is computed over the payload only.
+<p id="section-3.2.4-2">For JSON Web Signatures (JWS) <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>, the <code>dataTbsHash</code> value is computed over the payload only.
 The protected header and any unprotected header parameters <span class="bcp14">MUST NOT</span> be included in the hash calculation.<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
 <p id="section-3.2.4-3">This exclusion avoids circular dependencies where certificate data may appear in the protected header.<a href="#section-3.2.4-3" class="pilcrow">¶</a></p>
 </section>
@@ -1449,7 +1447,7 @@ The protected header and any unprotected header parameters <span class="bcp14">M
 <a href="#section-3.2.5" class="section-number selfRef">3.2.5. </a><a href="#name-cose-binding" class="section-name selfRef">COSE Binding</a>
           </h4>
 <p id="section-3.2.5-1">Identifier: "cose"<a href="#section-3.2.5-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.5-2">For COSE signatures <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span>, the dataTbsHash value is computed over the payload only.
+<p id="section-3.2.5-2">For COSE signatures <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span>, the <code>dataTbsHash</code> value is computed over the payload only.
 The protected header and any unprotected header parameters <span class="bcp14">MUST NOT</span> be included in the hash calculation.<a href="#section-3.2.5-2" class="pilcrow">¶</a></p>
 <p id="section-3.2.5-3">This exclusion avoids circular dependencies where certificate data may appear in the protected header.<a href="#section-3.2.5-3" class="pilcrow">¶</a></p>
 </section>
@@ -1498,7 +1496,7 @@ The protected header and any unprotected header parameters <span class="bcp14">M
 
    -- signedDocumentBinding Certificate Extension OID
 
-   id-pe-signedDocumentBinding OBJECT IDENTIFIER ::= { id-pe TBD }
+   id-pe-signedDocumentBinding OBJECT IDENTIFIER ::= { id-pe 37 }
 
    END
 
@@ -1516,7 +1514,7 @@ The protected header and any unprotected header parameters <span class="bcp14">M
         <h3 id="name-certificates-without-revoca">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-certificates-without-revoca" class="section-name selfRef">Certificates Without Revocation</a>
         </h3>
-<p id="section-5.1-1">Certificates conforming to this profile include the id-ce-noRevAvail extension and therefore do not provide any revocation mechanism. Such certificates attest only to the state of trust and correctness of procedures at the time of issuance.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">One signature certificates are intended for use with the id-ce-noRevAvail extension and no revocation mechanism. Such certificates attest only to the state of trust and correctness of procedures at the time of issuance. A verifier cannot infer this property from the signedDocumentBinding extension alone and determines it by inspecting the certificate for the id-ce-noRevAvail extension.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">The Security considerations in <span>[<a href="#RFC9608" class="cite xref">RFC9608</a>]</span> also applies to this document.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1527,7 +1525,7 @@ The protected header and any unprotected header parameters <span class="bcp14">M
         </h3>
 <p id="section-5.2-1">The signedDocumentBinding extension binds the certificate to specific signed content by including a hash of the data to be signed. Verification of this binding is not required for successful cryptographic validation of the signature. A signature can therefore validate correctly even if the binding is not checked.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">However, a relying party <span class="bcp14">SHOULD</span> verify that the signed content matches the dataTbsHash value in the signedDocumentBinding extension. Performing this check ensures that the certificate is used only with the content for which it was issued and enforces the intended scope of the certificate.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3">The security model of this profile states that the associated private key is generated for, and used in, exactly one signing operation and is then destroyed. This property holds independently of whether the binding is verified by the relying party. Nevertheless, failure to verify the binding weakens the protections provided by this profile and increases the risk of certificate substitution or unintended certificate reuse.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">The security model of this specification states that the associated private key is generated for, and used in, exactly one signing operation and is then destroyed. This property holds independently of whether the binding is verified by the relying party. Nevertheless, failure to verify the binding weakens the protections provided by this specification and increases the risk of certificate substitution or unintended certificate reuse.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 <p id="section-5.2-4">When verified, the signedDocumentBinding extension provides an additional safeguard against the use of the certificate for any signature other than the one for which it was issued.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
