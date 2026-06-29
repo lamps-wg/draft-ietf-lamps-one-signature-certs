@@ -110,7 +110,7 @@ informative:
 
 --- abstract
 
-This document defines a profile for certificates that are issued for validation of the digital signature produced by a single signing operation. Each certificate is created at the time of signing and bound to the signed content. The associated signing key is generated, used to produce a single digital signature, and then immediately destroyed. The certificate never expires and is never revoked, which simplifies long-term validation.
+This document defines the signedDocumentBinding certificate extension, which binds a certificate to the signed content of a digital signature produced by a single signing operation. Each certificate is created at the time of signing and the associated signing key is generated, used to produce a single digital signature, and then immediately destroyed. Certificates carrying this extension are intended to be issued without a revocation mechanism and with no expiration, which simplifies long-term validation.
 
 --- middle
 
@@ -134,10 +134,11 @@ This document takes this one step further and allows validation at any time in t
 
 One signature certificates have the following common characteristics:
 
-- They never expire;
-- They are never revoked;
-- They are bound to a specific document content; and
-- They assert that the corresponding private key was destroyed immediately after signing.
+- They are bound to a specific document content;
+- They assert that the corresponding private key was destroyed immediately after signing; and
+- They are typically issued without a revocation mechanism and with no expiration.
+
+The document binding is carried by the signedDocumentBinding extension defined in this document and is the signal that identifies a certificate as a one signature certificate. The absence of revocation and expiration are recommended properties; a verifier determines whether they apply to a given certificate by inspecting the relevant certificate fields.
 
 ### Revocation
 
@@ -147,9 +148,9 @@ The fact that the same key is used many times exposes the key for the risks of l
 
 When a signing key is used only once, that risk of exposure is greatly reduced, and it has been shown that most usages of dedicated private keys and certificates no longer require revocation.
 
-The CA can readily attest that a certain procedure was followed when the certificate was issued. As a matter of policy, the certificate itself is an attestation that the CP and CPS {{RFC3647}} were followed successfully when the signature was created. Certificates issued according to this profile therefore only attest to the validity at the time of issuance and signing, rather than a retroactive state at the time of validation. This profile is intended for those applications where this declaration of validity is relevant and useful.
+The CA can readily attest that a certain procedure was followed when the certificate was issued. As a matter of policy, the certificate itself is an attestation that the CP and CPS {{RFC3647}} were followed successfully when the signature was created. A certificate issued without a revocation mechanism therefore only attests to the validity at the time of issuance and signing, rather than a retroactive state at the time of validation. This specification is intended for those applications where this declaration of validity is relevant and useful, and it is for this reason that one signature certificates are RECOMMENDED to be issued without revocation.
 
-Applications that require traditional revocation checking that provides the state at the time of validation MUST NOT use this profile.
+Applications that require traditional revocation checking that provides the state at the time of validation are not served by an unrevocable certificate, and a CA SHOULD NOT issue one signature certificates without revocation for such applications.
 
 An example usage where this is useful is in services where the signed document is stored as an internal evidence record, such as when a Tax agency allows citizens to sign their tax declarations. This record is then pulled out and used only in case of a dispute where the identified signer challenges the signature. A revocation service is less likely to contribute to this process. If the challenge is successful, the signed document will be removed without affecting any other signed documents in the archive.
 
@@ -164,9 +165,9 @@ However, a validation service may have several options available for how to hand
 
 In addition, when a certificate repository is available, renewal of the CA certificate can preserve the ability to validate the infinite validity end enitiy certificate.
 
-This profile assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation MAY require additional trust provisioning by the verifier.
+This specification assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation MAY require additional trust provisioning by the verifier.
 
-Mechanisms for establishing trust in a CA beyond their certificate validity period are outside the scope of this profile.
+Mechanisms for establishing trust in a CA beyond their certificate validity period are outside the scope of this specification.
 
 # Conventions and Definitions
 
@@ -175,13 +176,15 @@ Mechanisms for establishing trust in a CA beyond their certificate validity peri
 
 # Certificate content
 
-Conforming certificates SHALL meet all requirements of this section.
+This document defines the signedDocumentBinding extension, which a CA includes in a certificate to bind that certificate to a specific signed content. The presence of this extension is the signal by which a relying party recognizes a certificate as a one signature certificate.
 
-Certificates MUST indicate that a certificate has no well-defined expiration date by setting the notAfter field to the GeneralizedTime value 99991231235959Z, as defined in {{RFC5280}}.
+A certificate that includes the signedDocumentBinding extension SHOULD also be issued with the properties described below, which together provide the simplified long-term validation that motivates this document.
 
-Certificates MUST include the id-ce-noRevAvail extension in compliance with {{RFC9608}}, indicating that this certificate is not supported by any revocation mechanism.
+Such a certificate SHOULD indicate that it has no well-defined expiration date by setting the notAfter field to the GeneralizedTime value 99991231235959Z, as defined in {{RFC5280}}.
 
-Certificates MUST include the signedDocumentBinding extension, binding the certificate to a specific signed content.
+Such a certificate SHOULD include the id-ce-noRevAvail extension in compliance with {{RFC9608}}, indicating that the certificate is not supported by any revocation mechanism.
+
+A verifier MUST determine whether these properties apply by inspecting the notAfter field and the presence of the id-ce-noRevAvail extension.
 
 ## The signedDocumentBinding extension
 
@@ -313,7 +316,7 @@ This exclusion avoids circular dependencies where certificate data may appear in
 
 ## Certificates Without Revocation
 
-Certificates conforming to this profile include the id-ce-noRevAvail extension and therefore do not provide any revocation mechanism. Such certificates attest only to the state of trust and correctness of procedures at the time of issuance.
+One signature certificates are intended for use with the id-ce-noRevAvail extension and no revocation mechanism. Such certificates attest only to the state of trust and correctness of procedures at the time of issuance. A verifier cannot infer this property from the signedDocumentBinding extension alone and determines it by inspecting the certificate for the id-ce-noRevAvail extension.
 
 The Security considerations in {{RFC9608}} also applies to this document.
 
@@ -323,7 +326,7 @@ The signedDocumentBinding extension binds the certificate to specific signed con
 
 However, a relying party SHOULD verify that the signed content matches the dataTbsHash value in the signedDocumentBinding extension. Performing this check ensures that the certificate is used only with the content for which it was issued and enforces the intended scope of the certificate.
 
-The security model of this profile states that the associated private key is generated for, and used in, exactly one signing operation and is then destroyed. This property holds independently of whether the binding is verified by the relying party. Nevertheless, failure to verify the binding weakens the protections provided by this profile and increases the risk of certificate substitution or unintended certificate reuse.
+The security model of this specification states that the associated private key is generated for, and used in, exactly one signing operation and is then destroyed. This property holds independently of whether the binding is verified by the relying party. Nevertheless, failure to verify the binding weakens the protections provided by this specification and increases the risk of certificate substitution or unintended certificate reuse.
 
 When verified, the signedDocumentBinding extension provides an additional safeguard against the use of the certificate for any signature other than the one for which it was issued.
 
