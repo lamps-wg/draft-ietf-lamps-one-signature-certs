@@ -10,7 +10,7 @@ Expires: 30 August 2026                                   Vigil Security
 
 
                        One Signature Certificates
-                 draft-lamps-one-signature-certs-latest
+              draft-ietf-lamps-one-signature-certs-latest
 
 Abstract
 
@@ -27,7 +27,8 @@ About This Document
    This note is to be removed before publishing as an RFC.
 
    Status information for this document may be found at
-   https://datatracker.ietf.org/doc/draft-lamps-one-signature-certs/.
+   https://datatracker.ietf.org/doc/draft-ietf-lamps-one-signature-
+   certs/.
 
    Source for this draft and an issue tracker can be found at
    https://github.com/lamps-wg/draft-ietf-lamps-one-signature-certs.
@@ -240,7 +241,7 @@ Table of Contents
    extension as non-critical.
 
    name           id-pe-signedDocumentBinding
-   OID            { id-pe TBD }
+   OID            { id-pe 37 }
    syntax         SignedDocumentBinding
    criticality    SHOULD be FALSE
 
@@ -400,7 +401,7 @@ Table of Contents
 
       -- signedDocumentBinding Certificate Extension OID
 
-      id-pe-signedDocumentBinding OBJECT IDENTIFIER ::= { id-pe TBD }
+      id-pe-signedDocumentBinding OBJECT IDENTIFIER ::= { id-pe 37 }
 
       END
    <CODE ENDS>
