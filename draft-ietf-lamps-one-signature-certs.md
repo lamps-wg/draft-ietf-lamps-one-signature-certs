@@ -106,7 +106,16 @@ normative:
       "ETSI": "EN 319 122-1 v1.2.1"
 
 informative:
+  RFC3161:
+  RFC5126:
   RFC9321:
+  EN319102-1:
+    title: "Electronic Signatures and Trust Infrastructures (ESI); Procedures for Creation and Validation of AdES Digital Signatures; Part 1: Creation and Validation"
+    author:
+      org: ETSI
+    date: 2024-06
+    seriesinfo:
+      "ETSI": "EN 319 102-1 v1.4.1"
 
 --- abstract
 
@@ -138,7 +147,7 @@ One signature certificates have the following common characteristics:
 - They assert that the corresponding private key was destroyed immediately after signing; and
 - They are typically issued without a revocation mechanism and with no expiration.
 
-The signedDocumentBinding extension indes the public key in the certificate to verifying the signature for the single identified document. When this extension is present, it is RECOMMENDED that the certificate not expire (notAfter is set to the GeneralizedTime value of 99991231235959Z) and the noRevAvail certificate extension [RFC9608] is also present to indicate that no revocation information is available for this certificate.
+The signedDocumentBinding extension binds the public key in the certificate to verification of the signature for the single identified document. When this extension is present, it is RECOMMENDED that the certificate not expire (notAfter is set to the GeneralizedTime value of 99991231235959Z) and the noRevAvail certificate extension [RFC9608] is also present to indicate that no revocation information is available for this certificate.
 
 ### Revocation
 
@@ -148,11 +157,11 @@ The fact that the same key is used many times exposes the key for the risks of l
 
 When a signing key is used only once, that risk of exposure is greatly reduced, and it has been shown that most usages of dedicated private keys and certificates no longer require revocation.
 
-The CA can readily attest that a certain procedure was followed when the certificate was issued. As a matter of policy, the certificate itself is an attestation that the CP and CPS {{RFC3647}} were followed successfully when the signature was created. A certificate issued without a revocation mechanism therefore only attests to the validity at the time of issuance and signing, rather than a retroactive state at the time of validation.
+When certificates are used to validate digital signatures the reasons for revocation after the time of signing are not relevant when the key is used only once. Under established signature validation procedures {{EN319102-1}}, a signature is assessed relative to a best-signature-time: the earliest time at which the signature is proven to have existed. A signing certificate that is revoked or that expires after the best-signature-time does not invalidate the signature; the past signature validation process treats such a signature as valid. The same principle underlies the grace period concept described for CAdES signatures {{RFC5126}}. Consequently, revocation information whose effective time is after the time of signing is not relevant to the validity of the signature.
 
-Applications that require traditional revocation checking that provides the state at the time of validation are not served by an unrevocable certificate, and a CA SHOULD NOT issue one signature certificates without revocation for such applications.
+Establishing the best-signature-time normally requires a trusted time source such as a time-stamp {{RFC3161}} from a trusted authority. A one signature certificate is created at the time of signing, so its issuance time establishes the time of signing directly, with the issuing CA fulfilling a role analogous to that of a time-stamp authority. Any revocation of the certificate would necessarily take effect after this time and would therefore not affect the validity of the already-created signature.
 
-An example usage where this is useful is in services where the signed document is stored as an internal evidence record, such as when a Tax agency allows citizens to sign their tax declarations. This record is then pulled out and used only in case of a dispute where the identified signer challenges the signature. A revocation service is less likely to contribute to this process. If the challenge is successful, the signed document will be removed without affecting any other signed documents in the archive.
+When revocation is due to key compromise, signature verifiers take extra caution because the key compromise could have taken place before the document signature was created. However, for a one signature certificate, the signing key is generated for a single signature and destroyed immediately afterwards, so the window during which the private key exists and could be compromised is extremely small.
 
 ### CA certificate validity
 
@@ -163,7 +172,7 @@ However, a validation service may have several options available for how to hand
 - The verifier may list the CA key and identity as trusted and treat it as a trust anchor.
 - The verifier may cross certify the CA and make it available for validation to a local trusted Trust Anchor.
 
-In addition, when a certificate repository is available, renewal of the CA certificate can preserve the ability to validate the infinite validity end enitiy certificate.
+In addition, when a certificate repository is available, renewal of the CA certificate can preserve the ability to validate the infinite validity end entity certificate.
 
 This specification assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation MAY require additional trust provisioning by the verifier.
 
@@ -381,6 +390,73 @@ IANA is requested to populate the registry with the following initial values:
 - Reference: This document
 
 --- back
+
+# Example Certificates
+
+This appendix contains non-normative example certificates that conform to
+this specification.
+
+Both certificates are issued to the subject "John Doe" by the issuing CA
+"Example Org CA". Each certificate has no well-defined expiration date
+(the notAfter field is set to the GeneralizedTime value 99991231235959Z),
+includes the id-ce-noRevAvail extension, asserts the nonRepudiation key
+usage as a critical extension, includes an authorityKeyIdentifier
+extension, and includes the signedDocumentBinding extension. In both
+examples the data to be signed is hashed with SHA-256, and the dataTbsHash
+value is the 32-octet sequence 0x01 0x02 ... 0x20.
+
+## Certificate with Default Binding
+
+In this certificate the bindingType field is absent, so the default binding
+applies. The signedDocumentBinding extension value contains only the
+dataTbsHash and hashAlg fields:
+
+    SignedDocumentBinding ::= SEQUENCE {
+      dataTbsHash  0102030405060708090A0B0C0D0E0F10
+                   1112131415161718191A1B1C1D1E1F20,
+      hashAlg      id-sha256 }
+
+    -----BEGIN CERTIFICATE-----
+    MIICKDCCAc6gAwIBAgIQVweFe0CFvyM8JFDu9wH/AzAKBggqhkjOPQQDAjA8MQsw
+    CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxFzAVBgNVBAMMDkV4YW1w
+    bGUgT3JnIENBMCAXDTI2MDcwMTE4MzkxMloYDzk5OTkxMjMxMjM1OTU5WjA2MQsw
+    CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxETAPBgNVBAMMCEpvaG4g
+    RG9lMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoDGGE1EyIPv2VlXSzW00DNJU
+    gb5SD8U5GX1inZpc0oHAkNKwYrcFEOtiY4f8vYDN51M+7uvSS+eG3n7104AZdqOB
+    tTCBsjArBgNVHSMEJDAigCChSvYTV05U5D1HFAKxqhGCj1tR/2mj1gBGOs7VIwC9
+    KjApBgNVHQ4EIgQgbC4lcDHxDRh34nfrxo872YShaEZ6kKHIaYF5dD9Un3IwDgYD
+    VR0PAQH/BAQDAgZAMAkGA1UdOAQCBQAwPQYIKwYBBQUHASUEMTAvBCABAgMEBQYH
+    CAkKCwwNDg8QERITFBUWFxgZGhscHR4fIDALBglghkgBZQMEAgEwCgYIKoZIzj0E
+    AwIDSAAwRQIhAKAjo5DGTI++9lJZrilg0ir5UQbxn2IcDBIwImrkQI4jAiBiYxfj
+    CVdXwwJEx3AoRrfODm9KrOLsKjA5dRxIewoNlg==
+    -----END CERTIFICATE-----
+
+## Certificate with "cades" Binding
+
+In this certificate the bindingType field is set to "cades", indicating the
+CAdES binding defined in this document. The signedDocumentBinding extension
+value contains the dataTbsHash, hashAlg, and bindingType fields:
+
+    SignedDocumentBinding ::= SEQUENCE {
+      dataTbsHash  0102030405060708090A0B0C0D0E0F10
+                   1112131415161718191A1B1C1D1E1F20,
+      hashAlg      id-sha256,
+      bindingType  "cades" }
+
+    -----BEGIN CERTIFICATE-----
+    MIICLzCCAdagAwIBAgIRAKkArNDJbg8prMEiyqT6MI0wCgYIKoZIzj0EAwIwPDEL
+    MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMRcwFQYDVQQDDA5FeGFt
+    cGxlIE9yZyBDQTAgFw0yNjA3MDExODM5MTJaGA85OTk5MTIzMTIzNTk1OVowNjEL
+    MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMREwDwYDVQQDDAhKb2hu
+    IERvZTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABKAxhhNRMiD79lZV0s1tNAzS
+    VIG+Ug/FORl9Yp2aXNKBwJDSsGK3BRDrYmOH/L2AzedTPu7r0kvnht5+9dOAGXaj
+    gbwwgbkwKwYDVR0jBCQwIoAgoUr2E1dOVOQ9RxQCsaoRgo9bUf9po9YARjrO1SMA
+    vSowKQYDVR0OBCIEIGwuJXAx8Q0Yd+J368aPO9mEoWhGepChyGmBeXQ/VJ9yMA4G
+    A1UdDwEB/wQEAwIGQDAJBgNVHTgEAgUAMEQGCCsGAQUFBwElBDgwNgQgAQIDBAUG
+    BwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAwCwYJYIZIAWUDBAIBDAVjYWRlczAK
+    BggqhkjOPQQDAgNHADBEAiBdNJa15qBpkYs7IP5Dlzb2ZeaudxNwwZhRUeE8Qvg6
+    uQIgLuiqo76eAQkHAiT8IlB/dn74SokUCs48f7ADk9p8zZA=
+    -----END CERTIFICATE-----
 
 # Acknowledgments
 {:numbered="false"}
