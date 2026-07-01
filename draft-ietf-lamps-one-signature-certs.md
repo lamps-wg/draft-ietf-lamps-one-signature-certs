@@ -161,7 +161,7 @@ When certificates are used to validate digital signatures the reasons for revoca
 
 Establishing the best-signature-time normally requires a trusted time source such as a time-stamp {{RFC3161}} from a trusted authority. A one signature certificate is created at the time of signing, so its issuance time establishes the time of signing directly, with the issuing CA fulfilling a role analogous to that of a time-stamp authority. Any revocation of the certificate would necessarily take effect after this time and would therefore not affect the validity of the already-created signature.
 
-The one case in which revocation after signing is normally treated with caution is revocation due to key compromise, because a compromise could predate the signature. For a one signature certificate, the signing key is generated for a single signature and destroyed immediately afterwards, so the window during which the key exists and could be compromised is extremely small.
+When revocation is due to key compromise, signature verifiers take extra caution because the key compromise could have taken place before the document signature was created. However, for a one signature certificate, the signing key is generated for a single signature and destroyed immediately afterwards, so the window during which the private key exists and could be compromised is extremely small.
 
 ### CA certificate validity
 
