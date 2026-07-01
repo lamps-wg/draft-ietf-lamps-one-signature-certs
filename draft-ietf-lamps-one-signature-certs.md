@@ -7,7 +7,7 @@ replaces: draft-santesson-one-signature-certs
 
 docname: draft-ietf-lamps-one-signature-certs-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
-date: 2026-02-26
+date: 2026-07-01
 consensus: true
 v: 3
 # area: Security
