@@ -170,8 +170,8 @@ Table of Contents
    private keys and certificates no longer require revocation.
 
    When certificates are used to validate digital signatures the reasons
-   for revocation after the time of signing are no longer relevant when
-   the key is used only once.  Under established signature validation
+   for revocation after the time of signing are not relevant when the
+   key is used only once.  Under established signature validation
    procedures [EN319102-1], a signature is assessed relative to a best-
    signature-time: the earliest time at which the signature is proven to
    have existed.  A signing certificate that is revoked or that expires
@@ -179,16 +179,17 @@ Table of Contents
    past signature validation process treats such a signature as valid.
    The same principle underlies the grace period concept described for
    CAdES signatures [RFC5126].  Consequently, revocation information
-   whose effective time is later than the time of signing is not
-   relevant to the validity of the signature.
+   whose effective time is after the time of signing is not relevant to
+   the validity of the signature.
 
    Establishing the best-signature-time normally requires a trusted time
-   source such as a time-stamp [RFC3161].  A one signature certificate
-   is created at the time of signing, so its issuance time establishes
-   the time of signing directly, with the issuing CA fulfilling a role
-   analogous to that of a time-stamp authority.  Any revocation of the
-   certificate would necessarily take effect after this time and would
-   therefore not affect the validity of the already-created signature.
+   source such as a time-stamp [RFC3161] from a trusted authority.  A
+   one signature certificate is created at the time of signing, so its
+   issuance time establishes the time of signing directly, with the
+   issuing CA fulfilling a role analogous to that of a time-stamp
+   authority.  Any revocation of the certificate would necessarily take
+   effect after this time and would therefore not affect the validity of
+   the already-created signature.
 
    The one case in which revocation after signing is normally treated
    with caution is revocation due to key compromise, because a
@@ -665,17 +666,18 @@ A.1.  Certificate with Default Binding
      hashAlg      id-sha256 }
 
    -----BEGIN CERTIFICATE-----
-   MIIB/TCCAaOgAwIBAgIQQxTF4lV2H+mgyrtI0hVcMDAKBggqhkjOPQQDAjA8MQsw
+   MIICKDCCAc6gAwIBAgIQVweFe0CFvyM8JFDu9wH/AzAKBggqhkjOPQQDAjA8MQsw
    CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxFzAVBgNVBAMMDkV4YW1w
-   bGUgT3JnIENBMCAXDTI2MDcwMTAwNDA1NloYDzk5OTkxMjMxMjM1OTU5WjA2MQsw
+   bGUgT3JnIENBMCAXDTI2MDcwMTE4MzkxMloYDzk5OTkxMjMxMjM1OTU5WjA2MQsw
    CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxETAPBgNVBAMMCEpvaG4g
-   RG9lMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEZVbrxq/8UUD2a+ctwaeLjaJj
-   7fA808fyCv/YqvnhjAx/d8dNYYiNnG9Q6Mr1drWq6JotfYcIumVMkm71TJeGEaOB
-   ijCBhzArBgNVHSMEJDAigCC0GNrbTqpO8AZBfAzJuM3s2gkV9w+aM55NoOnxZ/Ot
-   BzAOBgNVHQ8BAf8EBAMCBkAwCQYDVR04BAIFADA9BggrBgEFBQcBJQQxMC8EIAEC
-   AwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gMAsGCWCGSAFlAwQCATAKBggq
-   hkjOPQQDAgNIADBFAiEApiHnyH2TByNKaBy09NnMuLAISZswhOa2nNc2ZxhsMP8C
-   IBiZSk+VjGQRZlzAj4ivoB+AQl/IG5QUgmc6+C52NqhR
+   RG9lMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoDGGE1EyIPv2VlXSzW00DNJU
+   gb5SD8U5GX1inZpc0oHAkNKwYrcFEOtiY4f8vYDN51M+7uvSS+eG3n7104AZdqOB
+   tTCBsjArBgNVHSMEJDAigCChSvYTV05U5D1HFAKxqhGCj1tR/2mj1gBGOs7VIwC9
+   KjApBgNVHQ4EIgQgbC4lcDHxDRh34nfrxo872YShaEZ6kKHIaYF5dD9Un3IwDgYD
+   VR0PAQH/BAQDAgZAMAkGA1UdOAQCBQAwPQYIKwYBBQUHASUEMTAvBCABAgMEBQYH
+   CAkKCwwNDg8QERITFBUWFxgZGhscHR4fIDALBglghkgBZQMEAgEwCgYIKoZIzj0E
+   AwIDSAAwRQIhAKAjo5DGTI++9lJZrilg0ir5UQbxn2IcDBIwImrkQI4jAiBiYxfj
+   CVdXwwJEx3AoRrfODm9KrOLsKjA5dRxIewoNlg==
    -----END CERTIFICATE-----
 
 A.2.  Certificate with "cades" Binding
@@ -692,17 +694,18 @@ A.2.  Certificate with "cades" Binding
      bindingType  "cades" }
 
    -----BEGIN CERTIFICATE-----
-   MIICBDCCAaugAwIBAgIRAI++cattrjEl5DAXpUzWqh4wCgYIKoZIzj0EAwIwPDEL
+   MIICLzCCAdagAwIBAgIRAKkArNDJbg8prMEiyqT6MI0wCgYIKoZIzj0EAwIwPDEL
    MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMRcwFQYDVQQDDA5FeGFt
-   cGxlIE9yZyBDQTAgFw0yNjA3MDEwMDQwNTZaGA85OTk5MTIzMTIzNTk1OVowNjEL
+   cGxlIE9yZyBDQTAgFw0yNjA3MDExODM5MTJaGA85OTk5MTIzMTIzNTk1OVowNjEL
    MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMREwDwYDVQQDDAhKb2hu
-   IERvZTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABGVW68av/FFA9mvnLcGni42i
-   Y+3wPNPH8gr/2Kr54YwMf3fHTWGIjZxvUOjK9Xa1quiaLX2HCLplTJJu9UyXhhGj
-   gZEwgY4wKwYDVR0jBCQwIoAgtBja206qTvAGQXwMybjN7NoJFfcPmjOeTaDp8Wfz
-   rQcwDgYDVR0PAQH/BAQDAgZAMAkGA1UdOAQCBQAwRAYIKwYBBQUHASUEODA2BCAB
-   AgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIDALBglghkgBZQMEAgEMBWNh
-   ZGVzMAoGCCqGSM49BAMCA0cAMEQCIHKDthvWIn7Xqbyc/COcWCwVEW/b67KQSZjK
-   DV41p7YmAiA1WAvnffXie33JRgc4ys2i0Q8S7Yyqvc1FDHTDIp+gfQ==
+   IERvZTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABKAxhhNRMiD79lZV0s1tNAzS
+   VIG+Ug/FORl9Yp2aXNKBwJDSsGK3BRDrYmOH/L2AzedTPu7r0kvnht5+9dOAGXaj
+   gbwwgbkwKwYDVR0jBCQwIoAgoUr2E1dOVOQ9RxQCsaoRgo9bUf9po9YARjrO1SMA
+   vSowKQYDVR0OBCIEIGwuJXAx8Q0Yd+J368aPO9mEoWhGepChyGmBeXQ/VJ9yMA4G
+   A1UdDwEB/wQEAwIGQDAJBgNVHTgEAgUAMEQGCCsGAQUFBwElBDgwNgQgAQIDBAUG
+   BwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAwCwYJYIZIAWUDBAIBDAVjYWRlczAK
+   BggqhkjOPQQDAgNHADBEAiBdNJa15qBpkYs7IP5Dlzb2ZeaudxNwwZhRUeE8Qvg6
+   uQIgLuiqo76eAQkHAiT8IlB/dn74SokUCs48f7ADk9p8zZA=
    -----END CERTIFICATE-----
 
 Acknowledgments
