@@ -106,7 +106,16 @@ normative:
       "ETSI": "EN 319 122-1 v1.2.1"
 
 informative:
+  RFC3161:
+  RFC5126:
   RFC9321:
+  EN319102-1:
+    title: "Electronic Signatures and Trust Infrastructures (ESI); Procedures for Creation and Validation of AdES Digital Signatures; Part 1: Creation and Validation"
+    author:
+      org: ETSI
+    date: 2024-06
+    seriesinfo:
+      "ETSI": "EN 319 102-1 v1.4.1"
 
 --- abstract
 
@@ -138,7 +147,7 @@ One signature certificates have the following common characteristics:
 - They assert that the corresponding private key was destroyed immediately after signing; and
 - They are typically issued without a revocation mechanism and with no expiration.
 
-The signedDocumentBinding extension indes the public key in the certificate to verifying the signature for the single identified document. When this extension is present, it is RECOMMENDED that the certificate not expire (notAfter is set to the GeneralizedTime value of 99991231235959Z) and the noRevAvail certificate extension [RFC9608] is also present to indicate that no revocation information is available for this certificate.
+The signedDocumentBinding extension binds the public key in the certificate to verification of the signature for the single identified document. When this extension is present, it is RECOMMENDED that the certificate not expire (notAfter is set to the GeneralizedTime value of 99991231235959Z) and the noRevAvail certificate extension [RFC9608] is also present to indicate that no revocation information is available for this certificate.
 
 ### Revocation
 
@@ -148,11 +157,11 @@ The fact that the same key is used many times exposes the key for the risks of l
 
 When a signing key is used only once, that risk of exposure is greatly reduced, and it has been shown that most usages of dedicated private keys and certificates no longer require revocation.
 
-The CA can readily attest that a certain procedure was followed when the certificate was issued. As a matter of policy, the certificate itself is an attestation that the CP and CPS {{RFC3647}} were followed successfully when the signature was created. A certificate issued without a revocation mechanism therefore only attests to the validity at the time of issuance and signing, rather than a retroactive state at the time of validation.
+When certificates are used to validate digital signatures the reasons for revocation after the time of signing are no longer relevant when the key is used only once. Under established signature validation procedures {{EN319102-1}}, a signature is assessed relative to a best-signature-time: the earliest time at which the signature is proven to have existed. A signing certificate that is revoked or that expires after the best-signature-time does not invalidate the signature; the past signature validation process treats such a signature as valid. The same principle underlies the grace period concept described for CAdES signatures {{RFC5126}}. Consequently, revocation information whose effective time is later than the time of signing is not relevant to the validity of the signature.
 
-Applications that require traditional revocation checking that provides the state at the time of validation are not served by an unrevocable certificate, and a CA SHOULD NOT issue one signature certificates without revocation for such applications.
+Establishing the best-signature-time normally requires a trusted time source such as a time-stamp {{RFC3161}}. A one signature certificate is created at the time of signing, so its issuance time establishes the time of signing directly, with the issuing CA fulfilling a role analogous to that of a time-stamp authority. Any revocation of the certificate would necessarily take effect after this time and would therefore not affect the validity of the already-created signature.
 
-An example usage where this is useful is in services where the signed document is stored as an internal evidence record, such as when a Tax agency allows citizens to sign their tax declarations. This record is then pulled out and used only in case of a dispute where the identified signer challenges the signature. A revocation service is less likely to contribute to this process. If the challenge is successful, the signed document will be removed without affecting any other signed documents in the archive.
+The one case in which revocation after signing is normally treated with caution is revocation due to key compromise, because a compromise could predate the signature. This case does not arise for a one signature certificate as the key is destroyed immediately after signing.
 
 ### CA certificate validity
 
@@ -163,7 +172,7 @@ However, a validation service may have several options available for how to hand
 - The verifier may list the CA key and identity as trusted and treat it as a trust anchor.
 - The verifier may cross certify the CA and make it available for validation to a local trusted Trust Anchor.
 
-In addition, when a certificate repository is available, renewal of the CA certificate can preserve the ability to validate the infinite validity end enitiy certificate.
+In addition, when a certificate repository is available, renewal of the CA certificate can preserve the ability to validate the infinite validity end entity certificate.
 
 This specification assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation MAY require additional trust provisioning by the verifier.
 
