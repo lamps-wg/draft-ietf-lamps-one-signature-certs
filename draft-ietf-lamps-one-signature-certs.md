@@ -382,6 +382,71 @@ IANA is requested to populate the registry with the following initial values:
 
 --- back
 
+# Example Certificates
+
+This appendix contains non-normative example certificates that conform to
+this specification.
+
+Both certificates are issued to the subject "John Doe" by the issuing CA
+"Example Org CA". Each certificate has no well-defined expiration date
+(the notAfter field is set to the GeneralizedTime value 99991231235959Z),
+includes the id-ce-noRevAvail extension, asserts the nonRepudiation key
+usage as a critical extension, includes an authorityKeyIdentifier
+extension, and includes the signedDocumentBinding extension. In both
+examples the data to be signed is hashed with SHA-256, and the dataTbsHash
+value is the 32-octet sequence 0x01 0x02 ... 0x20.
+
+## Certificate with Default Binding
+
+In this certificate the bindingType field is absent, so the default binding
+applies. The signedDocumentBinding extension value contains only the
+dataTbsHash and hashAlg fields:
+
+    SignedDocumentBinding ::= SEQUENCE {
+      dataTbsHash  0102030405060708090A0B0C0D0E0F10
+                   1112131415161718191A1B1C1D1E1F20,
+      hashAlg      id-sha256 }
+
+    -----BEGIN CERTIFICATE-----
+    MIIB/TCCAaOgAwIBAgIQQxTF4lV2H+mgyrtI0hVcMDAKBggqhkjOPQQDAjA8MQsw
+    CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxFzAVBgNVBAMMDkV4YW1w
+    bGUgT3JnIENBMCAXDTI2MDcwMTAwNDA1NloYDzk5OTkxMjMxMjM1OTU5WjA2MQsw
+    CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxETAPBgNVBAMMCEpvaG4g
+    RG9lMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEZVbrxq/8UUD2a+ctwaeLjaJj
+    7fA808fyCv/YqvnhjAx/d8dNYYiNnG9Q6Mr1drWq6JotfYcIumVMkm71TJeGEaOB
+    ijCBhzArBgNVHSMEJDAigCC0GNrbTqpO8AZBfAzJuM3s2gkV9w+aM55NoOnxZ/Ot
+    BzAOBgNVHQ8BAf8EBAMCBkAwCQYDVR04BAIFADA9BggrBgEFBQcBJQQxMC8EIAEC
+    AwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gMAsGCWCGSAFlAwQCATAKBggq
+    hkjOPQQDAgNIADBFAiEApiHnyH2TByNKaBy09NnMuLAISZswhOa2nNc2ZxhsMP8C
+    IBiZSk+VjGQRZlzAj4ivoB+AQl/IG5QUgmc6+C52NqhR
+    -----END CERTIFICATE-----
+
+## Certificate with "cades" Binding
+
+In this certificate the bindingType field is set to "cades", indicating the
+CAdES binding defined in this document. The signedDocumentBinding extension
+value contains the dataTbsHash, hashAlg, and bindingType fields:
+
+    SignedDocumentBinding ::= SEQUENCE {
+      dataTbsHash  0102030405060708090A0B0C0D0E0F10
+                   1112131415161718191A1B1C1D1E1F20,
+      hashAlg      id-sha256,
+      bindingType  "cades" }
+
+    -----BEGIN CERTIFICATE-----
+    MIICBDCCAaugAwIBAgIRAI++cattrjEl5DAXpUzWqh4wCgYIKoZIzj0EAwIwPDEL
+    MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMRcwFQYDVQQDDA5FeGFt
+    cGxlIE9yZyBDQTAgFw0yNjA3MDEwMDQwNTZaGA85OTk5MTIzMTIzNTk1OVowNjEL
+    MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMREwDwYDVQQDDAhKb2hu
+    IERvZTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABGVW68av/FFA9mvnLcGni42i
+    Y+3wPNPH8gr/2Kr54YwMf3fHTWGIjZxvUOjK9Xa1quiaLX2HCLplTJJu9UyXhhGj
+    gZEwgY4wKwYDVR0jBCQwIoAgtBja206qTvAGQXwMybjN7NoJFfcPmjOeTaDp8Wfz
+    rQcwDgYDVR0PAQH/BAQDAgZAMAkGA1UdOAQCBQAwRAYIKwYBBQUHASUEODA2BCAB
+    AgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIDALBglghkgBZQMEAgEMBWNh
+    ZGVzMAoGCCqGSM49BAMCA0cAMEQCIHKDthvWIn7Xqbyc/COcWCwVEW/b67KQSZjK
+    DV41p7YmAiA1WAvnffXie33JRgc4ys2i0Q8S7Yyqvc1FDHTDIp+gfQ==
+    -----END CERTIFICATE-----
+
 # Acknowledgments
 {:numbered="false"}
 
