@@ -5,8 +5,8 @@
 LAMPS                                                       S. Santesson
 Internet-Draft                                           IDsec Solutions
 Intended status: Standards Track                              R. Housley
-Expires: 30 August 2026                                   Vigil Security
-                                                        26 February 2026
+Expires: 2 January 2027                                   Vigil Security
+                                                             1 July 2026
 
 
                        One Signature Certificates
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 August 2026.
+   This Internet-Draft will expire on 2 January 2027.
 
 Copyright Notice
 
