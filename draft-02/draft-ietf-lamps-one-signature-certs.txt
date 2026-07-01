@@ -193,9 +193,10 @@ Table of Contents
 
    The one case in which revocation after signing is normally treated
    with caution is revocation due to key compromise, because a
-   compromise could predate the signature.  This case does not arise for
-   a one signature certificate as the key is destroyed immediately after
-   signing.
+   compromise could predate the signature.  For a one signature
+   certificate, the signing key is generated for a single signature and
+   destroyed immediately afterwards, so the window during which the key
+   exists and could be compromised is extremely small.
 
 1.1.2.  CA certificate validity
 
