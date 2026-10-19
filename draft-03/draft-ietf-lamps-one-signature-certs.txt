@@ -5,8 +5,8 @@
 LAMPS                                                       S. Santesson
 Internet-Draft                                           IDsec Solutions
 Intended status: Standards Track                              R. Housley
-Expires: 30 August 2026                                   Vigil Security
-                                                        26 February 2026
+Expires: 2 January 2027                                   Vigil Security
+                                                             1 July 2026
 
 
                        One Signature Certificates
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 August 2026.
+   This Internet-Draft will expire on 2 January 2027.
 
 Copyright Notice
 
@@ -85,13 +85,12 @@ Table of Contents
      5.1.  Certificates Without Revocation
      5.2.  Signed Document Binding
    6.  IANA Considerations
-     6.1.  Registry for signedDocumentBinding bindingType Identifiers
-       6.1.1.  Registry Contents
-       6.1.2.  Registration Policy
-       6.1.3.  Initial Registry Contents
    7.  References
      7.1.  Normative References
      7.2.  Informative References
+   Appendix A.  Example Certificates
+     A.1.  Certificate with Default Binding
+     A.2.  Certificate with CAdES Binding
    Acknowledgments
    Authors' Addresses
 
@@ -142,13 +141,13 @@ Table of Contents
    *  They are typically issued without a revocation mechanism and with
       no expiration.
 
-   The signedDocumentBinding extension indes the public key in the
-   certificate to verifying the signature for the single identified
-   document.  When this extension is present, it is RECOMMENDED that the
-   certificate not expire (notAfter is set to the GeneralizedTime value
-   of 99991231235959Z) and the noRevAvail certificate extension
-   [RFC9608] is also present to indicate that no revocation information
-   is available for this certificate.
+   The signedDocumentBinding extension binds the public key in the
+   certificate to verification of the signature for the single
+   identified document.  When this extension is present, it is
+   RECOMMENDED that the certificate not expire (notAfter is set to the
+   GeneralizedTime value of 99991231235959Z) and the noRevAvail
+   certificate extension [RFC9608] is also present to indicate that no
+   revocation information is available for this certificate.
 
 1.1.1.  Revocation
 
@@ -166,27 +165,35 @@ Table of Contents
    greatly reduced, and it has been shown that most usages of dedicated
    private keys and certificates no longer require revocation.
 
-   The CA can readily attest that a certain procedure was followed when
-   the certificate was issued.  As a matter of policy, the certificate
-   itself is an attestation that the CP and CPS [RFC3647] were followed
-   successfully when the signature was created.  A certificate issued
-   without a revocation mechanism therefore only attests to the validity
-   at the time of issuance and signing, rather than a retroactive state
-   at the time of validation.
+   When certificates are used to validate digital signatures the reasons
+   for revocation after the time of signing are not relevant when the
+   key is used only once.  Under established signature validation
+   procedures [EN319102-1], a signature is assessed relative to a best-
+   signature-time: the earliest time at which the signature is proven to
+   have existed.  A signing certificate that is revoked or that expires
+   after the best-signature-time does not invalidate the signature; the
+   past signature validation process treats such a signature as valid.
+   The same principle underlies the grace period concept described for
+   CAdES signatures [RFC5126].  Consequently, revocation information
+   whose effective time is after the time of signing is not relevant to
+   the validity of the signature.
 
-   Applications that require traditional revocation checking that
-   provides the state at the time of validation are not served by an
-   unrevocable certificate, and a CA SHOULD NOT issue one signature
-   certificates without revocation for such applications.
+   Establishing the best-signature-time normally requires a trusted time
+   source such as a time-stamp [RFC3161] from a trusted authority.  A
+   one signature certificate is created at the time of signing, so its
+   issuance time establishes the time of signing directly, with the
+   issuing CA fulfilling a role analogous to that of a time-stamp
+   authority.  Any revocation of the certificate would necessarily take
+   effect after this time and would therefore not affect the validity of
+   the already-created signature.
 
-   An example usage where this is useful is in services where the signed
-   document is stored as an internal evidence record, such as when a Tax
-   agency allows citizens to sign their tax declarations.  This record
-   is then pulled out and used only in case of a dispute where the
-   identified signer challenges the signature.  A revocation service is
-   less likely to contribute to this process.  If the challenge is
-   successful, the signed document will be removed without affecting any
-   other signed documents in the archive.
+   When revocation is due to key compromise, signature verifiers take
+   extra caution because the key compromise could have taken place
+   before the document signature was created.  However, for a one
+   signature certificate, the signing key is generated for a single
+   signature and destroyed immediately afterwards, so the window during
+   which the private key exists and could be compromised is extremely
+   small.
 
 1.1.2.  CA certificate validity
 
@@ -207,7 +214,7 @@ Table of Contents
 
    In addition, when a certificate repository is available, renewal of
    the CA certificate can preserve the ability to validate the infinite
-   validity end enitiy certificate.
+   validity end entity certificate.
 
    This specification assumes that initial validation of a signed
    document is performed within the validity period of the CA
@@ -265,7 +272,7 @@ Table of Contents
    SignedDocumentBinding ::= SEQUENCE {
    dataTbsHash     OCTET STRING,
    hashAlg         DigestAlgorithmIdentifier,
-   bindingType     UTF8String OPTIONAL }
+   bindingType     OBJECT IDENTIFIER OPTIONAL }
 
    The dataTbsHash field MUST contain a hash of the data to be signed.
 
@@ -324,12 +331,12 @@ Table of Contents
    either the signer certificate itself or a hash of the signer
    certificate.  This includes JWS and COSE signed documents that can
    include signer certificates in the protected header.  JWS signatures
-   [RFC7515] MUST use the "jws" bindingType and COSE signatures
-   [RFC8152] MUST use the "cose" binding type.
+   [RFC7515] MUST use the id-sdbt-jws bindingType and COSE signatures
+   [RFC8152] MUST use the id-sdbt-cose binding type.
 
 3.2.2.  CAdES Binding
 
-   Identifier: "cades"
+   Identifier: id-sdbt-cades
 
    For CMS [RFC5652] or ETSI CAdES [CADES] signatures incorporating
    SigningCertificate or SigningCertificateV2 attributes [RFC5035] in
@@ -342,7 +349,7 @@ Table of Contents
 
 3.2.3.  XAdES Binding
 
-   Identifier: "xades"
+   Identifier: id-sdbt-xades
 
    For ETSI XML Advanced Electronic Signatures [XADES], the dataTbsHash
    value is computed over the canonicalized SignedInfo element, with any
@@ -361,7 +368,7 @@ Table of Contents
 
 3.2.4.  JWS Binding
 
-   Identifier: "jws"
+   Identifier: id-sdbt-jws
 
    For JSON Web Signatures (JWS) [RFC7515], the dataTbsHash value is
    computed over the payload only.  The protected header and any
@@ -373,7 +380,7 @@ Table of Contents
 
 3.2.5.  COSE Binding
 
-   Identifier: "cose"
+   Identifier: id-sdbt-cose
 
    For COSE signatures [RFC8152], the dataTbsHash value is computed over
    the payload only.  The protected header and any unprotected header
@@ -414,11 +421,19 @@ Table of Contents
       SignedDocumentBinding ::= SEQUENCE {
         dataTbsHash     OCTET STRING,
         hashAlg         DigestAlgorithmIdentifier,
-        bindingType     UTF8String OPTIONAL }
+        bindingType     OBJECT IDENTIFIER OPTIONAL }
 
       -- signedDocumentBinding Certificate Extension OID
 
       id-pe-signedDocumentBinding OBJECT IDENTIFIER ::= { id-pe 37 }
+
+      -- bindintType identifiers
+
+      id-sdbt OBJECT IDENTIFIER ::= {id-pkix TBD}
+      id-sdbt-cades OBJECT IDENTIFIER ::= {id-sdbt 1}
+      id-sdbt-xades OBJECT IDENTIFIER ::= {id-sdbt 2}
+      id-sdbt-jws OBJECT IDENTIFIER ::= {id-sdbt 3}
+      id-sdbt-cose OBJECT IDENTIFIER ::= {id-sdbt 4}
 
       END
    <CODE ENDS>
@@ -465,77 +480,15 @@ Table of Contents
 
 6.  IANA Considerations
 
-6.1.  Registry for signedDocumentBinding bindingType Identifiers
+   IANA has registered id-pe-signedDocumentBinding (id-pe 37) in the SMI
+   Security for PKIX Certificate Extension registry.
 
-   IANA is requested to create a new registry entitled: “Signed Document
-   Binding Type Identifiers”
+   IANA is requested to assign an OBJECT IDENTIFIER for id-sdbt from the
+   SMI Security for PKIX arc (id-pkix), for use as the arc for the
+   signed document binding type identifiers defined in this document.
 
-   This registry shall contain identifiers used in the bindingType field
-   of the signedDocumentBinding certificate extension defined in this
-   document.
-
-6.1.1.  Registry Contents
-
-   Each registry entry shall contain the following fields:
-
-   *  Identifier: A UTF-8 string identifying the binding type.
-
-   *  Description: A brief description of how the dataTbsHash value is
-      computed.
-
-   *  Reference: A reference to the document that defines the binding
-      type.
-
-6.1.2.  Registration Policy
-
-   The registration policy for this registry is Specification Required
-   as defined in [RFC8174].
-
-   The designated expert(s) SHALL ensure that:
-
-   *  The binding type definition clearly specifies a deterministic and
-      unambiguous procedure for computing the dataTbsHash value.
-
-   *  The specification explains how circular dependencies with
-      certificate inclusion are avoided, where applicable.
-
-   *  The identifier is unique within the registry.
-
-6.1.3.  Initial Registry Contents
-
-   IANA is requested to populate the registry with the following initial
-   values:
-
-   *  Identifier: (absent)
-
-   *  Description: Default binding as defined in this document
-
-   *  Reference: This document
-
-   *  Identifier: cades
-
-   *  Description: CMS/CAdES binding excluding SigningCertificate
-      attributes
-
-   *  Reference: This document
-
-   *  Identifier: xades
-
-   *  Description: XAdES binding excluding SignedProperties reference
-
-   *  Reference: This document
-
-   *  Identifier: jws
-
-   *  Description: JWS payload-only binding
-
-   *  Reference: This document
-
-   *  Identifier: cose
-
-   *  Description: COSE payload-only binding
-
-   *  Reference: This document
+   IANA is requested to assign an OBJECT IDENTIFIER for the ASN.1 module
+   defined in this document
 
 7.  References
 
@@ -610,9 +563,101 @@ Table of Contents
 
 7.2.  Informative References
 
+   [EN319102-1]
+              ETSI, "Electronic Signatures and Trust Infrastructures
+              (ESI); Procedures for Creation and Validation of AdES
+              Digital Signatures; Part 1: Creation and Validation",
+              ETSI EN 319 102-1 v1.4.1, June 2024.
+
+   [RFC3161]  Adams, C., Cain, P., Pinkas, D., and R. Zuccherato,
+              "Internet X.509 Public Key Infrastructure Time-Stamp
+              Protocol (TSP)", RFC 3161, DOI 10.17487/RFC3161, August
+              2001, <https://www.rfc-editor.org/rfc/rfc3161>.
+
+   [RFC5126]  Pinkas, D., Pope, N., and J. Ross, "CMS Advanced
+              Electronic Signatures (CAdES)", RFC 5126,
+              DOI 10.17487/RFC5126, March 2008,
+              <https://www.rfc-editor.org/rfc/rfc5126>.
+
    [RFC9321]  Santesson, S. and R. Housley, "Signature Validation
               Token", RFC 9321, DOI 10.17487/RFC9321, October 2022,
               <https://www.rfc-editor.org/rfc/rfc9321>.
+
+Appendix A.  Example Certificates
+
+   This appendix contains non-normative example certificates that
+   conform to this specification.
+
+   Both certificates are issued to the subject "John Doe" by the issuing
+   CA "Example Org CA".  Each certificate has no well-defined expiration
+   date (the notAfter field is set to the GeneralizedTime value
+   99991231235959Z), includes the id-ce-noRevAvail extension, asserts
+   the nonRepudiation key usage as a critical extension, includes an
+   authorityKeyIdentifier extension, and includes the
+   signedDocumentBinding extension.  In both examples the data to be
+   signed is hashed with SHA-256, and the dataTbsHash value is the
+   32-octet sequence 0x01 0x02 ... 0x20.
+
+   Note: The bindingType identifiers under the id-sdbt arc are not yet
+   assigned by IANA.  The certificate in the CAdES binding example below
+   therefore encodes a temporary value for id-sdbt-cades
+   (1.3.6.1.5.5.7.678.1).  Once IANA assigns the id-sdbt arc (see
+   Section 6), these examples will be regenerated to encode the assigned
+   values.
+
+A.1.  Certificate with Default Binding
+
+   In this certificate the bindingType field is absent, so the default
+   binding applies.  The signedDocumentBinding extension value contains
+   only the dataTbsHash and hashAlg fields:
+
+   SignedDocumentBinding ::= SEQUENCE {
+     dataTbsHash  0102030405060708090A0B0C0D0E0F10
+                  1112131415161718191A1B1C1D1E1F20,
+     hashAlg      id-sha256 }
+
+   -----BEGIN CERTIFICATE-----
+   MIICKTCCAc+gAwIBAgIRAI7V+b91dWX33B91sG6qd2UwCgYIKoZIzj0EAwIwPDEL
+   MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMRcwFQYDVQQDDA5FeGFt
+   cGxlIE9yZyBDQTAgFw0yNjEwMTkxMTM0MjZaGA85OTk5MTIzMTIzNTk1OVowNjEL
+   MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMREwDwYDVQQDDAhKb2hu
+   IERvZTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABKQ4ROOuF7jU+idMSoip24Tl
+   Ym2KZo0+tYP/E++lYW8ALZ1kkXkBqdUjgpQfMyLvQgTsWp5n9YjGmea4B6YSYfSj
+   gbUwgbIwKwYDVR0jBCQwIoAg6B1O4NEjMB7ELX9Zznn8ipwuBtvFqC7RQhNQ6UL0
+   O/wwKQYDVR0OBCIEIBqZDdgHIkyrfQfc0CXarHpEciP9wt7utG3pFeyjk0YHMA4G
+   A1UdDwEB/wQEAwIGQDAJBgNVHTgEAgUAMD0GCCsGAQUFBwElBDEwLwQgAQIDBAUG
+   BwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAwCwYJYIZIAWUDBAIBMAoGCCqGSM49
+   BAMCA0gAMEUCIAhk3G38KWbFYqJnqXscHjvxgwBpzr23MJH4xB0dR/DzAiEA2SrH
+   VzshT2aMETPK2P1a//E14ksLPGnfqh2jv+8U3R8=
+   -----END CERTIFICATE-----
+
+A.2.  Certificate with CAdES Binding
+
+   In this certificate the bindingType field is set to id-sdbt-cades,
+   indicating the CAdES binding defined in this document.  The
+   signedDocumentBinding extension value contains the dataTbsHash,
+   hashAlg, and bindingType fields:
+
+   SignedDocumentBinding ::= SEQUENCE {
+     dataTbsHash  0102030405060708090A0B0C0D0E0F10
+                  1112131415161718191A1B1C1D1E1F20,
+     hashAlg      id-sha256,
+     bindingType  id-sdbt-cades }
+
+   -----BEGIN CERTIFICATE-----
+   MIICMzCCAdmgAwIBAgIQcq7O3LNZE5pcMsxH2O6IWTAKBggqhkjOPQQDAjA8MQsw
+   CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxFzAVBgNVBAMMDkV4YW1w
+   bGUgT3JnIENBMCAXDTI2MTAxOTExMzQyNloYDzk5OTkxMjMxMjM1OTU5WjA2MQsw
+   CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxETAPBgNVBAMMCEpvaG4g
+   RG9lMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEpDhE464XuNT6J0xKiKnbhOVi
+   bYpmjT61g/8T76VhbwAtnWSReQGp1SOClB8zIu9CBOxanmf1iMaZ5rgHphJh9KOB
+   wDCBvTArBgNVHSMEJDAigCDoHU7g0SMwHsQtf1nOefyKnC4G28WoLtFCE1DpQvQ7
+   /DApBgNVHQ4EIgQgGpkN2AciTKt9B9zQJdqsekRyI/3C3u60bekV7KOTRgcwDgYD
+   VR0PAQH/BAQDAgZAMAkGA1UdOAQCBQAwSAYIKwYBBQUHASUEPDA6BCABAgMEBQYH
+   CAkKCwwNDg8QERITFBUWFxgZGhscHR4fIDALBglghkgBZQMEAgEGCSsGAQUFB4Um
+   ATAKBggqhkjOPQQDAgNIADBFAiEAnJ8B/xGYYH6L/PYnfQqBS4jRxvKsluK787rZ
+   r2HV5LACIEN7s3ZVQGOyjvZ/L+O1e6MfqG6mbYuGdkEHk3TZtUnK
+   -----END CERTIFICATE-----
 
 Acknowledgments
 
