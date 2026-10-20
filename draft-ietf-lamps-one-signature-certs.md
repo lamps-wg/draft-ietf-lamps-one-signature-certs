@@ -241,11 +241,11 @@ Examples include:
 - For CMS Signatures {{RFC5652}}, the DER-encoded SignedAttributes structure.
 - For other formats, the data structure input directly to the signature algorithm.
 
-This `bindingType` MUST NOT be used when the data to be signed includes either the signer certificate itself or a hash of the signer certificate. This includes JWS and COSE signed documents that can include signer certificates in the protected header. JWS signatures {{RFC7515}} MUST use the id-sdbt-jws `bindingType` and COSE signatures {{RFC8152}} MUST use the id-sdbt-cose binding type.
+This `bindingType` MUST NOT be used when the data to be signed includes either the signer certificate itself or a hash of the signer certificate. This includes JWS and COSE signed documents that can include signer certificates in the protected header. JWS signatures {{RFC7515}} MUST use the id-bt-jws `bindingType` and COSE signatures {{RFC8152}} MUST use the id-bt-cose binding type.
 
 ### CAdES Binding
 
-Identifier: id-sdbt-cades
+Identifier: id-bt-cades
 
 For CMS {{RFC5652}} or ETSI CAdES {{CADES}} signatures incorporating SigningCertificate or SigningCertificateV2 attributes {{RFC5035}} in signedAttrs,
 the `dataTbsHash` value is computed over the DER encoding of SignerInfo excluding any instances of SigningCertificate or SigningCertificateV2 attributes from the SignedAttributes set.
@@ -254,7 +254,7 @@ This `bindingType` also applies to PDF {{ISOPDF2}} and ETSI PAdES {{PADES}} sign
 
 ### XAdES Binding
 
-Identifier: id-sdbt-xades
+Identifier: id-bt-xades
 
 For ETSI XML Advanced Electronic Signatures {{XADES}}, the `dataTbsHash` value is computed over the canonicalized SignedInfo element,
 with any Reference elements whose Type attribute equals "http://uri.etsi.org/01903#SignedProperties" removed prior to hashing.
@@ -264,7 +264,7 @@ Note: This operation is purely textual and does not require XML parsing beyond l
 
 ### JWS Binding
 
-Identifier: id-sdbt-jws
+Identifier: id-bt-jws
 
 For JSON Web Signatures (JWS) {{RFC7515}}, the `dataTbsHash` value is computed over the payload only.
 The protected header and any unprotected header parameters MUST NOT be included in the hash calculation.
@@ -273,7 +273,7 @@ This exclusion avoids circular dependencies where certificate data may appear in
 
 ### COSE Binding
 
-Identifier: id-sdbt-cose
+Identifier: id-bt-cose
 
 For COSE signatures {{RFC8152}}, the `dataTbsHash` value is computed over the payload only.
 The protected header and any unprotected header parameters MUST NOT be included in the hash calculation.
@@ -318,13 +318,13 @@ This exclusion avoids circular dependencies where certificate data may appear in
 
        id-pe-signedDocumentBinding OBJECT IDENTIFIER ::= { id-pe 37 }
 
-       -- bindintType identifiers
+       -- bindingType identifiers
 
-       id-sdbt OBJECT IDENTIFIER ::= {id-pkix TBD}
-       id-sdbt-cades OBJECT IDENTIFIER ::= {id-sdbt 1}
-       id-sdbt-xades OBJECT IDENTIFIER ::= {id-sdbt 2}
-       id-sdbt-jws OBJECT IDENTIFIER ::= {id-sdbt 3}
-       id-sdbt-cose OBJECT IDENTIFIER ::= {id-sdbt 4}
+       id-bt OBJECT IDENTIFIER ::= {id-pkix TBD}
+       id-bt-cades OBJECT IDENTIFIER ::= {id-bt 1}
+       id-bt-xades OBJECT IDENTIFIER ::= {id-bt 2}
+       id-bt-jws OBJECT IDENTIFIER ::= {id-bt 3}
+       id-bt-cose OBJECT IDENTIFIER ::= {id-bt 4}
 
        END
      <CODE ENDS>
@@ -351,7 +351,7 @@ When verified, the signedDocumentBinding extension provides an additional safegu
 
 IANA has registered id-pe-signedDocumentBinding (id-pe 37) in the SMI Security for PKIX Certificate Extension registry.
 
-IANA is requested to assign an OBJECT IDENTIFIER for id-sdbt from the SMI Security for PKIX arc (id-pkix), for use as the arc for the signed document binding type identifiers defined in this document.
+IANA is requested to assign an OBJECT IDENTIFIER for id-bt from the SMI Security for PKIX arc (id-pkix), for use as the arc for the signed document binding type identifiers defined in this document.
 
 IANA is requested to assign an OBJECT IDENTIFIER for the ASN.1 module defined in this document
 
@@ -371,11 +371,11 @@ extension, and includes the signedDocumentBinding extension. In both
 examples the data to be signed is hashed with SHA-256, and the dataTbsHash
 value is the 32-octet sequence 0x01 0x02 ... 0x20.
 
-Note: The bindingType identifiers under the id-sdbt arc are not yet assigned
-by IANA. The certificate in the CAdES binding example below therefore encodes
-a temporary value for id-sdbt-cades (1.3.6.1.5.5.7.678.1). Once IANA assigns
-the id-sdbt arc (see {{iana}}), these examples will be regenerated to encode
-the assigned values.
+Note: The id-bt arc has not yet been assigned by IANA. These examples
+anticipate the assignment of 1.3.6.1.5.5.7.26 to id-bt; the CAdES binding
+example below therefore encodes id-bt-cades as 1.3.6.1.5.5.7.26.1
+({ id-bt 1 }). Should IANA assign a different value to the id-bt arc
+(see {{iana}}), these examples will be regenerated to align with it.
 
 ## Certificate with Default Binding
 
@@ -389,23 +389,23 @@ dataTbsHash and hashAlg fields:
       hashAlg      id-sha256 }
 
     -----BEGIN CERTIFICATE-----
-    MIICKTCCAc+gAwIBAgIRAI7V+b91dWX33B91sG6qd2UwCgYIKoZIzj0EAwIwPDEL
-    MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMRcwFQYDVQQDDA5FeGFt
-    cGxlIE9yZyBDQTAgFw0yNjEwMTkxMTM0MjZaGA85OTk5MTIzMTIzNTk1OVowNjEL
-    MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMREwDwYDVQQDDAhKb2hu
-    IERvZTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABKQ4ROOuF7jU+idMSoip24Tl
-    Ym2KZo0+tYP/E++lYW8ALZ1kkXkBqdUjgpQfMyLvQgTsWp5n9YjGmea4B6YSYfSj
-    gbUwgbIwKwYDVR0jBCQwIoAg6B1O4NEjMB7ELX9Zznn8ipwuBtvFqC7RQhNQ6UL0
-    O/wwKQYDVR0OBCIEIBqZDdgHIkyrfQfc0CXarHpEciP9wt7utG3pFeyjk0YHMA4G
-    A1UdDwEB/wQEAwIGQDAJBgNVHTgEAgUAMD0GCCsGAQUFBwElBDEwLwQgAQIDBAUG
-    BwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAwCwYJYIZIAWUDBAIBMAoGCCqGSM49
-    BAMCA0gAMEUCIAhk3G38KWbFYqJnqXscHjvxgwBpzr23MJH4xB0dR/DzAiEA2SrH
-    VzshT2aMETPK2P1a//E14ksLPGnfqh2jv+8U3R8=
+    MIICKTCCAc6gAwIBAgIQZe7zqov/Aufh6nVt/mAMWDAKBggqhkjOPQQDAjA8MQsw
+    CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxFzAVBgNVBAMMDkV4YW1w
+    bGUgT3JnIENBMCAXDTI2MTAyMDIxMjYzNFoYDzk5OTkxMjMxMjM1OTU5WjA2MQsw
+    CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxETAPBgNVBAMMCEpvaG4g
+    RG9lMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE8gQ14JPK+/m8VWhRh2km/mDV
+    dh0Ha49htyqJLnPeb4pfBBUxR0paZbx10pQxOB/KIy/kXMzrcQVR/zsEIoTSAaOB
+    tTCBsjArBgNVHSMEJDAigCDH/dB8wyv8KAJ6APwI1PziC3th/taTu8TAbFiGavtE
+    wjApBgNVHQ4EIgQg6Uhmpf7aqymQdRmci2oJv1iDwcUd+jSq6ocVAQ9vkDQwDgYD
+    VR0PAQH/BAQDAgZAMAkGA1UdOAQCBQAwPQYIKwYBBQUHASUEMTAvBCABAgMEBQYH
+    CAkKCwwNDg8QERITFBUWFxgZGhscHR4fIDALBglghkgBZQMEAgEwCgYIKoZIzj0E
+    AwIDSQAwRgIhANSdZFRgNOKSJgvOyoKBmOmdOlJ/9DyNlhOzS5SMt5bdAiEAq824
+    Oyp7hCD8EGfyXsDBsP5HO4hOGvNBN+h10cr3NhY=
     -----END CERTIFICATE-----
 
 ## Certificate with CAdES Binding
 
-In this certificate the bindingType field is set to id-sdbt-cades, indicating the
+In this certificate the bindingType field is set to id-bt-cades, indicating the
 CAdES binding defined in this document. The signedDocumentBinding extension
 value contains the dataTbsHash, hashAlg, and bindingType fields:
 
@@ -413,21 +413,21 @@ value contains the dataTbsHash, hashAlg, and bindingType fields:
       dataTbsHash  0102030405060708090A0B0C0D0E0F10
                    1112131415161718191A1B1C1D1E1F20,
       hashAlg      id-sha256,
-      bindingType  id-sdbt-cades }
+      bindingType  id-bt-cades }
 
     -----BEGIN CERTIFICATE-----
-    MIICMzCCAdmgAwIBAgIQcq7O3LNZE5pcMsxH2O6IWTAKBggqhkjOPQQDAjA8MQsw
-    CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxFzAVBgNVBAMMDkV4YW1w
-    bGUgT3JnIENBMCAXDTI2MTAxOTExMzQyNloYDzk5OTkxMjMxMjM1OTU5WjA2MQsw
-    CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxETAPBgNVBAMMCEpvaG4g
-    RG9lMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEpDhE464XuNT6J0xKiKnbhOVi
-    bYpmjT61g/8T76VhbwAtnWSReQGp1SOClB8zIu9CBOxanmf1iMaZ5rgHphJh9KOB
-    wDCBvTArBgNVHSMEJDAigCDoHU7g0SMwHsQtf1nOefyKnC4G28WoLtFCE1DpQvQ7
-    /DApBgNVHQ4EIgQgGpkN2AciTKt9B9zQJdqsekRyI/3C3u60bekV7KOTRgcwDgYD
-    VR0PAQH/BAQDAgZAMAkGA1UdOAQCBQAwSAYIKwYBBQUHASUEPDA6BCABAgMEBQYH
-    CAkKCwwNDg8QERITFBUWFxgZGhscHR4fIDALBglghkgBZQMEAgEGCSsGAQUFB4Um
-    ATAKBggqhkjOPQQDAgNIADBFAiEAnJ8B/xGYYH6L/PYnfQqBS4jRxvKsluK787rZ
-    r2HV5LACIEN7s3ZVQGOyjvZ/L+O1e6MfqG6mbYuGdkEHk3TZtUnK
+    MIICNDCCAdmgAwIBAgIRAOPipqpq0R50YTaa4sEqrfYwCgYIKoZIzj0EAwIwPDEL
+    MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMRcwFQYDVQQDDA5FeGFt
+    cGxlIE9yZyBDQTAgFw0yNjEwMjAyMTI2MzRaGA85OTk5MTIzMTIzNTk1OVowNjEL
+    MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMREwDwYDVQQDDAhKb2hu
+    IERvZTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABPIENeCTyvv5vFVoUYdpJv5g
+    1XYdB2uPYbcqiS5z3m+KXwQVMUdKWmW8ddKUMTgfyiMv5FzM63EFUf87BCKE0gGj
+    gb8wgbwwKwYDVR0jBCQwIoAgx/3QfMMr/CgCegD8CNT84gt7Yf7Wk7vEwGxYhmr7
+    RMIwKQYDVR0OBCIEIOlIZqX+2qspkHUZnItqCb9Yg8HFHfo0quqHFQEPb5A0MA4G
+    A1UdDwEB/wQEAwIGQDAJBgNVHTgEAgUAMEcGCCsGAQUFBwElBDswOQQgAQIDBAUG
+    BwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAwCwYJYIZIAWUDBAIBBggrBgEFBQca
+    ATAKBggqhkjOPQQDAgNJADBGAiEAs8QmUcxJcUicrcg6SCNDuGbLyOBRzMsL6OHc
+    9VxPA+MCIQDvws84x3n6FP1uGIufCtZEFt5e2WDm3/3xmyMAag6/6w==
     -----END CERTIFICATE-----
 
 # Acknowledgments
