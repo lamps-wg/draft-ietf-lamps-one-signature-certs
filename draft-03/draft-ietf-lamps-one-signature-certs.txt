@@ -68,9 +68,10 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction
-     1.1.  Basic features
-       1.1.1.  Revocation
-       1.1.2.  CA certificate validity
+     1.1.  Design Rationale
+     1.2.  Basic features
+       1.2.1.  Revocation
+       1.2.2.  CA certificate validity
    2.  Conventions and Definitions
    3.  Certificate content
      3.1.  The signedDocumentBinding extension
@@ -129,7 +130,17 @@ Table of Contents
    any time in the future as long as trust in the CA certificate can be
    established.
 
-1.1.  Basic features
+1.1.  Design Rationale
+
+   An alternate approach for a single signature credential could have
+   certified the hash value of the to-be-signed document.  This approach
+   was not taken because verification would be different than other
+   digitally signed documents.  The approach taken allows existing
+   certificate path validation and digital signature validation
+   implementations to process certificates that are associate with one
+   and only one signature.
+
+1.2.  Basic features
 
    One signature certificates have the following common characteristics:
 
@@ -149,7 +160,7 @@ Table of Contents
    certificate extension [RFC9608] is also present to indicate that no
    revocation information is available for this certificate.
 
-1.1.1.  Revocation
+1.2.1.  Revocation
 
    Traditional certificates that are re-used over time have many
    legitimate reasons for revocation, such as if the private key is lost
@@ -195,7 +206,7 @@ Table of Contents
    which the private key exists and could be compromised is extremely
    small.
 
-1.1.2.  CA certificate validity
+1.2.2.  CA certificate validity
 
    Even if the end entity certificate has infinite validity, the
    capability to validate the certificate is limited to the capability
