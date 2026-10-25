@@ -139,6 +139,10 @@ While this type of signature service solves many problems, it still suffers from
 
 This document takes this one step further and allows validation at any time in the future as long as trust in the CA certificate can be established.
 
+## Design Rationale
+
+An alternate approach for a single signature credential could have certified the hash value of the to-be-signed document. This approach was not taken because verification would be different than other digitally signed documents.  The approach taken allows existing certificate path validation and digital signature validation implementations to process certificates that are associate with one and only one signature.
+
 ## Basic features
 
 One signature certificates have the following common characteristics:
