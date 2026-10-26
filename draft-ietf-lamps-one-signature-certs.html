@@ -10,25 +10,25 @@
 <meta content="
        This document defines the signedDocumentBinding certificate extension, which binds a certificate to the signed content of a digital signature produced by a single signing operation. Each certificate is created at the time of signing and the associated signing key is generated, used to produce a single digital signature, and then immediately destroyed. Certificates carrying this extension are intended to be issued without a revocation mechanism and with no expiration, which simplifies long-term validation. 
     " name="description">
-<meta content="xml2rfc 3.34.0" name="generator">
+<meta content="xml2rfc 3.34.1" name="generator">
 <meta content="certificate" name="keyword">
 <meta content="signature" name="keyword">
 <meta content="X.509" name="keyword">
 <meta content="draft-ietf-lamps-one-signature-certs-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.34.0
-    Python 3.14.5
-    ConfigArgParse 1.7.5
+  xml2rfc 3.34.1
+    Python 3.14.8
+    ConfigArgParse 1.8.0
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.10.0
+    platformdirs 4.13.4
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.8.1
+    wcwidth 0.9.2
 -->
 <link href="draft-ietf-lamps-one-signature-certs.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -64,7 +64,6 @@
   src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
   unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
-
 @font-face {
   font-family: 'Lora';
   font-style: italic;
@@ -113,7 +112,6 @@
   src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-
 @font-face {
   font-family: 'Lora';
   font-style: normal;
@@ -178,7 +176,6 @@
   font-display: swap;
   src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
 }
 
 @font-face {
@@ -1150,13 +1147,16 @@ svg {
             <p id="section-toc.1-1.1.1"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
-                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-basic-features" class="internal xref">Basic features</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1.2.1">
-                    <p id="section-toc.1-1.1.2.1.2.1.1" class="keepWithNext"><a href="#section-1.1.1" class="auto internal xref">1.1.1</a>.  <a href="#name-revocation" class="internal xref">Revocation</a></p>
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-design-rationale" class="internal xref">Design Rationale</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1.2.2">
-                    <p id="section-toc.1-1.1.2.1.2.2.1" class="keepWithNext"><a href="#section-1.1.2" class="auto internal xref">1.1.2</a>.  <a href="#name-ca-certificate-validity" class="internal xref">CA certificate validity</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.2">
+                <p id="section-toc.1-1.1.2.2.1"><a href="#section-1.2" class="auto internal xref">1.2</a>.  <a href="#name-basic-features" class="internal xref">Basic features</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.2.2.1">
+                    <p id="section-toc.1-1.1.2.2.2.1.1" class="keepWithNext"><a href="#section-1.2.1" class="auto internal xref">1.2.1</a>.  <a href="#name-revocation" class="internal xref">Revocation</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.2.2.2">
+                    <p id="section-toc.1-1.1.2.2.2.2.1" class="keepWithNext"><a href="#section-1.2.2" class="auto internal xref">1.2.2</a>.  <a href="#name-ca-certificate-validity" class="internal xref">CA certificate validity</a></p>
 </li>
                 </ul>
 </li>
@@ -1209,22 +1209,6 @@ svg {
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-registry-for-signeddocument" class="internal xref">Registry for signedDocumentBinding bindingType Identifiers</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.1">
-                    <p id="section-toc.1-1.6.2.1.2.1.1"><a href="#section-6.1.1" class="auto internal xref">6.1.1</a>.  <a href="#name-registry-contents" class="internal xref">Registry Contents</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.2">
-                    <p id="section-toc.1-1.6.2.1.2.2.1"><a href="#section-6.1.2" class="auto internal xref">6.1.2</a>.  <a href="#name-registration-policy" class="internal xref">Registration Policy</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.3">
-                    <p id="section-toc.1-1.6.2.1.2.3.1"><a href="#section-6.1.3" class="auto internal xref">6.1.3</a>.  <a href="#name-initial-registry-contents" class="internal xref">Initial Registry Contents</a></p>
-</li>
-                </ul>
-</li>
-            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-references" class="internal xref">References</a></p>
@@ -1244,7 +1228,7 @@ svg {
                 <p id="section-toc.1-1.8.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-certificate-with-default-bi" class="internal xref">Certificate with Default Binding</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-certificate-with-cades-bind" class="internal xref">Certificate with "cades" Binding</a></p>
+                <p id="section-toc.1-1.8.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-certificate-with-cades-bind" class="internal xref">Certificate with CAdES Binding</a></p>
 </li>
             </ul>
 </li>
@@ -1284,55 +1268,63 @@ svg {
       </ul>
 <p id="section-1-4">While this type of signature service solves many problems, it still suffers from the complexity caused by expiring signing certificates. One solution to this problem is the Signature Validation Token (SVT) <span>[<a href="#RFC9321" class="cite xref">RFC9321</a>]</span>, where future validation can rely on a previous successful validation rather than validation based on aging data.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">This document takes this one step further and allows validation at any time in the future as long as trust in the CA certificate can be established.<a href="#section-1-5" class="pilcrow">¶</a></p>
-<div id="basic-features">
+<div id="design-rationale">
 <section id="section-1.1">
-        <h3 id="name-basic-features">
-<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-basic-features" class="section-name selfRef">Basic features</a>
+        <h3 id="name-design-rationale">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-design-rationale" class="section-name selfRef">Design Rationale</a>
         </h3>
-<p id="section-1.1-1">One signature certificates have the following common characteristics:<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-1">An alternate approach for a single signature credential could have certified the hash value of the to-be-signed document. This approach was not taken because verification would be different than other digitally signed documents.  The approach taken allows existing certificate path validation and digital signature validation implementations to process certificates that are associate with one and only one signature.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="basic-features">
+<section id="section-1.2">
+        <h3 id="name-basic-features">
+<a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-basic-features" class="section-name selfRef">Basic features</a>
+        </h3>
+<p id="section-1.2-1">One signature certificates have the following common characteristics:<a href="#section-1.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1-2.1">
-            <p id="section-1.1-2.1.1">They are bound to a specific document content;<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-1.2-2.1">
+            <p id="section-1.2-2.1.1">They are bound to a specific document content;<a href="#section-1.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.1-2.2">
-            <p id="section-1.1-2.2.1">They assert that the corresponding private key was destroyed immediately after signing; and<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-1.2-2.2">
+            <p id="section-1.2-2.2.1">They assert that the corresponding private key was destroyed immediately after signing; and<a href="#section-1.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.1-2.3">
-            <p id="section-1.1-2.3.1">They are typically issued without a revocation mechanism and with no expiration.<a href="#section-1.1-2.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-1.2-2.3">
+            <p id="section-1.2-2.3.1">They are typically issued without a revocation mechanism and with no expiration.<a href="#section-1.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-1.1-3">The signedDocumentBinding extension binds the public key in the certificate to verification of the signature for the single identified document. When this extension is present, it is <span class="bcp14">RECOMMENDED</span> that the certificate not expire (notAfter is set to the GeneralizedTime value of 99991231235959Z) and the noRevAvail certificate extension <span>[<a href="#RFC9608" class="cite xref">RFC9608</a>]</span> is also present to indicate that no revocation information is available for this certificate.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+<p id="section-1.2-3">The signedDocumentBinding extension binds the public key in the certificate to verification of the signature for the single identified document. When this extension is present, it is <span class="bcp14">RECOMMENDED</span> that the certificate not expire (notAfter is set to the GeneralizedTime value of 99991231235959Z) and the noRevAvail certificate extension <span>[<a href="#RFC9608" class="cite xref">RFC9608</a>]</span> is also present to indicate that no revocation information is available for this certificate.<a href="#section-1.2-3" class="pilcrow">¶</a></p>
 <div id="revocation">
-<section id="section-1.1.1">
+<section id="section-1.2.1">
           <h4 id="name-revocation">
-<a href="#section-1.1.1" class="section-number selfRef">1.1.1. </a><a href="#name-revocation" class="section-name selfRef">Revocation</a>
+<a href="#section-1.2.1" class="section-number selfRef">1.2.1. </a><a href="#name-revocation" class="section-name selfRef">Revocation</a>
           </h4>
-<p id="section-1.1.1-1">Traditional certificates that are re-used over time have many legitimate reasons for revocation, such as if the private key is lost or compromised. This can lead to large volumes of revocation data.<a href="#section-1.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-1.1.1-2">The fact that the same key is used many times exposes the key for the risks of loss, unauthorized usage, or theft. When many objects are signed with the same private key, the risk of exposure and the number of affected signed documents upon revocation increases, unless properly timestamped and properly verified.<a href="#section-1.1.1-2" class="pilcrow">¶</a></p>
-<p id="section-1.1.1-3">When a signing key is used only once, that risk of exposure is greatly reduced, and it has been shown that most usages of dedicated private keys and certificates no longer require revocation.<a href="#section-1.1.1-3" class="pilcrow">¶</a></p>
-<p id="section-1.1.1-4">When certificates are used to validate digital signatures the reasons for revocation after the time of signing are not relevant when the key is used only once. Under established signature validation procedures <span>[<a href="#EN319102-1" class="cite xref">EN319102-1</a>]</span>, a signature is assessed relative to a best-signature-time: the earliest time at which the signature is proven to have existed. A signing certificate that is revoked or that expires after the best-signature-time does not invalidate the signature; the past signature validation process treats such a signature as valid. The same principle underlies the grace period concept described for CAdES signatures <span>[<a href="#RFC5126" class="cite xref">RFC5126</a>]</span>. Consequently, revocation information whose effective time is after the time of signing is not relevant to the validity of the signature.<a href="#section-1.1.1-4" class="pilcrow">¶</a></p>
-<p id="section-1.1.1-5">Establishing the best-signature-time normally requires a trusted time source such as a time-stamp <span>[<a href="#RFC3161" class="cite xref">RFC3161</a>]</span> from a trusted authority. A one signature certificate is created at the time of signing, so its issuance time establishes the time of signing directly, with the issuing CA fulfilling a role analogous to that of a time-stamp authority. Any revocation of the certificate would necessarily take effect after this time and would therefore not affect the validity of the already-created signature.<a href="#section-1.1.1-5" class="pilcrow">¶</a></p>
-<p id="section-1.1.1-6">When revocation is due to key compromise, signature verifiers take extra caution because the key compromise could have taken place before the document signature was created. However, for a one signature certificate, the signing key is generated for a single signature and destroyed immediately afterwards, so the window during which the private key exists and could be compromised is extremely small.<a href="#section-1.1.1-6" class="pilcrow">¶</a></p>
+<p id="section-1.2.1-1">Traditional certificates that are re-used over time have many legitimate reasons for revocation, such as if the private key is lost or compromised. This can lead to large volumes of revocation data.<a href="#section-1.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.2.1-2">The fact that the same key is used many times exposes the key for the risks of loss, unauthorized usage, or theft. When many objects are signed with the same private key, the risk of exposure and the number of affected signed documents upon revocation increases, unless properly timestamped and properly verified.<a href="#section-1.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-1.2.1-3">When a signing key is used only once, that risk of exposure is greatly reduced, and it has been shown that most usages of dedicated private keys and certificates no longer require revocation.<a href="#section-1.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-1.2.1-4">When certificates are used to validate digital signatures the reasons for revocation after the time of signing are not relevant when the key is used only once. Under established signature validation procedures <span>[<a href="#EN319102-1" class="cite xref">EN319102-1</a>]</span>, a signature is assessed relative to a best-signature-time: the earliest time at which the signature is proven to have existed. A signing certificate that is revoked or that expires after the best-signature-time does not invalidate the signature; the past signature validation process treats such a signature as valid. The same principle underlies the grace period concept described for CAdES signatures <span>[<a href="#RFC5126" class="cite xref">RFC5126</a>]</span>. Consequently, revocation information whose effective time is after the time of signing is not relevant to the validity of the signature.<a href="#section-1.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-1.2.1-5">Establishing the best-signature-time normally requires a trusted time source such as a time-stamp <span>[<a href="#RFC3161" class="cite xref">RFC3161</a>]</span> from a trusted authority. A one signature certificate is created at the time of signing, so its issuance time establishes the time of signing directly, with the issuing CA fulfilling a role analogous to that of a time-stamp authority. Any revocation of the certificate would necessarily take effect after this time and would therefore not affect the validity of the already-created signature.<a href="#section-1.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-1.2.1-6">When revocation is due to key compromise, signature verifiers take extra caution because the key compromise could have taken place before the document signature was created. However, for a one signature certificate, the signing key is generated for a single signature and destroyed immediately afterwards, so the window during which the private key exists and could be compromised is extremely small.<a href="#section-1.2.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ca-certificate-validity">
-<section id="section-1.1.2">
+<section id="section-1.2.2">
           <h4 id="name-ca-certificate-validity">
-<a href="#section-1.1.2" class="section-number selfRef">1.1.2. </a><a href="#name-ca-certificate-validity" class="section-name selfRef">CA certificate validity</a>
+<a href="#section-1.2.2" class="section-number selfRef">1.2.2. </a><a href="#name-ca-certificate-validity" class="section-name selfRef">CA certificate validity</a>
           </h4>
-<p id="section-1.1.2-1">Even if the end entity certificate has infinite validity, the capability to validate the certificate is limited to the capability to trust the CA. For initial validation, in a typical scenario, this is limited by the validity period of the CA certificate.<a href="#section-1.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-1.1.2-2">However, a validation service may have several options available for how to handle CA trust, in particular when re-validating archived documents:<a href="#section-1.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-1.2.2-1">Even if the end entity certificate has infinite validity, the capability to validate the certificate is limited to the capability to trust the CA. For initial validation, in a typical scenario, this is limited by the validity period of the CA certificate.<a href="#section-1.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.2.2-2">However, a validation service may have several options available for how to handle CA trust, in particular when re-validating archived documents:<a href="#section-1.2.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1.2-3.1">
-              <p id="section-1.1.2-3.1.1">The verifier may list the CA key and identity as trusted and treat it as a trust anchor.<a href="#section-1.1.2-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-1.2.2-3.1">
+              <p id="section-1.2.2-3.1.1">The verifier may list the CA key and identity as trusted and treat it as a trust anchor.<a href="#section-1.2.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-1.1.2-3.2">
-              <p id="section-1.1.2-3.2.1">The verifier may cross certify the CA and make it available for validation to a local trusted Trust Anchor.<a href="#section-1.1.2-3.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-1.2.2-3.2">
+              <p id="section-1.2.2-3.2.1">The verifier may cross certify the CA and make it available for validation to a local trusted Trust Anchor.<a href="#section-1.2.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-1.1.2-4">In addition, when a certificate repository is available, renewal of the CA certificate can preserve the ability to validate the infinite validity end entity certificate.<a href="#section-1.1.2-4" class="pilcrow">¶</a></p>
-<p id="section-1.1.2-5">This specification assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation <span class="bcp14">MAY</span> require additional trust provisioning by the verifier.<a href="#section-1.1.2-5" class="pilcrow">¶</a></p>
-<p id="section-1.1.2-6">Mechanisms for establishing trust in a CA beyond their certificate validity period are outside the scope of this specification.<a href="#section-1.1.2-6" class="pilcrow">¶</a></p>
+<p id="section-1.2.2-4">In addition, when a certificate repository is available, renewal of the CA certificate can preserve the ability to validate the infinite validity end entity certificate.<a href="#section-1.2.2-4" class="pilcrow">¶</a></p>
+<p id="section-1.2.2-5">This specification assumes that initial validation of a signed document is performed within the validity period of the CA certificate. Realizing the full benefit of a non-expiring end entity certificate for later re-validation <span class="bcp14">MAY</span> require additional trust provisioning by the verifier.<a href="#section-1.2.2-5" class="pilcrow">¶</a></p>
+<p id="section-1.2.2-6">Mechanisms for establishing trust in a CA beyond their certificate validity period are outside the scope of this specification.<a href="#section-1.2.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1376,7 +1368,7 @@ criticality    SHOULD be FALSE
 SignedDocumentBinding ::= SEQUENCE {
 dataTbsHash     OCTET STRING,
 hashAlg         DigestAlgorithmIdentifier,
-bindingType     UTF8String OPTIONAL }
+bindingType     OBJECT IDENTIFIER OPTIONAL }
 </pre><a href="#section-3.1-2" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1-3">The <code>dataTbsHash</code> field <span class="bcp14">MUST</span> contain a hash of the data to be signed.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
@@ -1415,7 +1407,7 @@ In this case, the <code>dataTbsHash</code> value is the hash of the exact data t
               <p id="section-3.2.1-3.3.1">For other formats, the data structure input directly to the signature algorithm.<a href="#section-3.2.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-3.2.1-4">This <code>bindingType</code> <span class="bcp14">MUST NOT</span> be used when the data to be signed includes either the signer certificate itself or a hash of the signer certificate. This includes JWS and COSE signed documents that can include signer certificates in the protected header. JWS signatures <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span> <span class="bcp14">MUST</span> use the "jws" <code>bindingType</code> and COSE signatures <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span> <span class="bcp14">MUST</span> use the "cose" binding type.<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-4">This <code>bindingType</code> <span class="bcp14">MUST NOT</span> be used when the data to be signed includes either the signer certificate itself or a hash of the signer certificate. This includes JWS and COSE signed documents that can include signer certificates in the protected header. JWS signatures <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span> <span class="bcp14">MUST</span> use the id-bt-jws <code>bindingType</code> and COSE signatures <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span> <span class="bcp14">MUST</span> use the id-bt-cose binding type.<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="cades-binding">
@@ -1423,7 +1415,7 @@ In this case, the <code>dataTbsHash</code> value is the hash of the exact data t
           <h4 id="name-cades-binding">
 <a href="#section-3.2.2" class="section-number selfRef">3.2.2. </a><a href="#name-cades-binding" class="section-name selfRef">CAdES Binding</a>
           </h4>
-<p id="section-3.2.2-1">Identifier: "cades"<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-1">Identifier: id-bt-cades<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.2-2">For CMS <span>[<a href="#RFC5652" class="cite xref">RFC5652</a>]</span> or ETSI CAdES <span>[<a href="#CADES" class="cite xref">CADES</a>]</span> signatures incorporating SigningCertificate or SigningCertificateV2 attributes <span>[<a href="#RFC5035" class="cite xref">RFC5035</a>]</span> in signedAttrs,
 the <code>dataTbsHash</code> value is computed over the DER encoding of SignerInfo excluding any instances of SigningCertificate or SigningCertificateV2 attributes from the SignedAttributes set.<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2.2-3">This <code>bindingType</code> also applies to PDF <span>[<a href="#ISOPDF2" class="cite xref">ISOPDF2</a>]</span> and ETSI PAdES <span>[<a href="#PADES" class="cite xref">PADES</a>]</span> signed documents when applicable due to its use of CMS for signing.<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
@@ -1434,7 +1426,7 @@ the <code>dataTbsHash</code> value is computed over the DER encoding of SignerIn
           <h4 id="name-xades-binding">
 <a href="#section-3.2.3" class="section-number selfRef">3.2.3. </a><a href="#name-xades-binding" class="section-name selfRef">XAdES Binding</a>
           </h4>
-<p id="section-3.2.3-1">Identifier: "xades"<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-1">Identifier: id-bt-xades<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.3-2">For ETSI XML Advanced Electronic Signatures <span>[<a href="#XADES" class="cite xref">XADES</a>]</span>, the <code>dataTbsHash</code> value is computed over the canonicalized SignedInfo element,
 with any Reference elements whose Type attribute equals "http://uri.etsi.org/01903#SignedProperties" removed prior to hashing.
 This ensures that the SignedProperties element, which may contain references to the signing certificate, does not create a circular dependency. Extraction of the Reference element <span class="bcp14">MUST</span> be done by removing only the characters from the leading &lt;Reference&gt; tag up to and including the ending &lt;/Reference&gt; tag, preserving all other bytes of SignedInfo unchanged, including any white space or line feeds.<a href="#section-3.2.3-2" class="pilcrow">¶</a></p>
@@ -1446,7 +1438,7 @@ This ensures that the SignedProperties element, which may contain references to 
           <h4 id="name-jws-binding">
 <a href="#section-3.2.4" class="section-number selfRef">3.2.4. </a><a href="#name-jws-binding" class="section-name selfRef">JWS Binding</a>
           </h4>
-<p id="section-3.2.4-1">Identifier: "jws"<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-1">Identifier: id-bt-jws<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.4-2">For JSON Web Signatures (JWS) <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>, the <code>dataTbsHash</code> value is computed over the payload only.
 The protected header and any unprotected header parameters <span class="bcp14">MUST NOT</span> be included in the hash calculation.<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
 <p id="section-3.2.4-3">This exclusion avoids circular dependencies where certificate data may appear in the protected header.<a href="#section-3.2.4-3" class="pilcrow">¶</a></p>
@@ -1457,7 +1449,7 @@ The protected header and any unprotected header parameters <span class="bcp14">M
           <h4 id="name-cose-binding">
 <a href="#section-3.2.5" class="section-number selfRef">3.2.5. </a><a href="#name-cose-binding" class="section-name selfRef">COSE Binding</a>
           </h4>
-<p id="section-3.2.5-1">Identifier: "cose"<a href="#section-3.2.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.5-1">Identifier: id-bt-cose<a href="#section-3.2.5-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.5-2">For COSE signatures <span>[<a href="#RFC8152" class="cite xref">RFC8152</a>]</span>, the <code>dataTbsHash</code> value is computed over the payload only.
 The protected header and any unprotected header parameters <span class="bcp14">MUST NOT</span> be included in the hash calculation.<a href="#section-3.2.5-2" class="pilcrow">¶</a></p>
 <p id="section-3.2.5-3">This exclusion avoids circular dependencies where certificate data may appear in the protected header.<a href="#section-3.2.5-3" class="pilcrow">¶</a></p>
@@ -1503,11 +1495,19 @@ The protected header and any unprotected header parameters <span class="bcp14">M
    SignedDocumentBinding ::= SEQUENCE {
      dataTbsHash     OCTET STRING,
      hashAlg         DigestAlgorithmIdentifier,
-     bindingType     UTF8String OPTIONAL }
+     bindingType     OBJECT IDENTIFIER OPTIONAL }
 
    -- signedDocumentBinding Certificate Extension OID
 
    id-pe-signedDocumentBinding OBJECT IDENTIFIER ::= { id-pe 37 }
+
+   -- bindingType identifiers
+
+   id-bt OBJECT IDENTIFIER ::= {id-pkix TBD}
+   id-bt-cades OBJECT IDENTIFIER ::= {id-bt 1}
+   id-bt-xades OBJECT IDENTIFIER ::= {id-bt 2}
+   id-bt-jws OBJECT IDENTIFIER ::= {id-bt 3}
+   id-bt-cose OBJECT IDENTIFIER ::= {id-bt 4}
 
    END
 
@@ -1542,114 +1542,14 @@ The protected header and any unprotected header parameters <span class="bcp14">M
 </div>
 </section>
 </div>
-<div id="iana-considerations">
+<div id="iana">
 <section id="section-6">
       <h2 id="name-iana-considerations">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<div id="registry-for-signeddocumentbinding-bindingtype-identifiers">
-<section id="section-6.1">
-        <h3 id="name-registry-for-signeddocument">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-registry-for-signeddocument" class="section-name selfRef">Registry for signedDocumentBinding bindingType Identifiers</a>
-        </h3>
-<p id="section-6.1-1">IANA is requested to create a new registry entitled: “Signed Document Binding Type Identifiers”<a href="#section-6.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.1-2">This registry shall contain identifiers used in the bindingType field of the signedDocumentBinding certificate extension defined in this document.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
-<div id="registry-contents">
-<section id="section-6.1.1">
-          <h4 id="name-registry-contents">
-<a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-registry-contents" class="section-name selfRef">Registry Contents</a>
-          </h4>
-<p id="section-6.1.1-1">Each registry entry shall contain the following fields:<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-6.1.1-2.1">
-              <p id="section-6.1.1-2.1.1">Identifier: A UTF-8 string identifying the binding type.<a href="#section-6.1.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.1-2.2">
-              <p id="section-6.1.1-2.2.1">Description: A brief description of how the dataTbsHash value is computed.<a href="#section-6.1.1-2.2.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.1-2.3">
-              <p id="section-6.1.1-2.3.1">Reference: A reference to the document that defines the binding type.<a href="#section-6.1.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-</section>
-</div>
-<div id="registration-policy">
-<section id="section-6.1.2">
-          <h4 id="name-registration-policy">
-<a href="#section-6.1.2" class="section-number selfRef">6.1.2. </a><a href="#name-registration-policy" class="section-name selfRef">Registration Policy</a>
-          </h4>
-<p id="section-6.1.2-1">The registration policy for this registry is Specification Required as defined in <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span>.<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.1.2-2">The designated expert(s) <span class="bcp14">SHALL</span> ensure that:<a href="#section-6.1.2-2" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-6.1.2-3.1">
-              <p id="section-6.1.2-3.1.1">The binding type definition clearly specifies a deterministic and unambiguous procedure for computing the dataTbsHash value.<a href="#section-6.1.2-3.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.2-3.2">
-              <p id="section-6.1.2-3.2.1">The specification explains how circular dependencies with certificate inclusion are avoided, where applicable.<a href="#section-6.1.2-3.2.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.2-3.3">
-              <p id="section-6.1.2-3.3.1">The identifier is unique within the registry.<a href="#section-6.1.2-3.3.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-</section>
-</div>
-<div id="initial-registry-contents">
-<section id="section-6.1.3">
-          <h4 id="name-initial-registry-contents">
-<a href="#section-6.1.3" class="section-number selfRef">6.1.3. </a><a href="#name-initial-registry-contents" class="section-name selfRef">Initial Registry Contents</a>
-          </h4>
-<p id="section-6.1.3-1">IANA is requested to populate the registry with the following initial values:<a href="#section-6.1.3-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-6.1.3-2.1">
-              <p id="section-6.1.3-2.1.1">Identifier: (absent)<a href="#section-6.1.3-2.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.3-2.2">
-              <p id="section-6.1.3-2.2.1">Description: Default binding as defined in this document<a href="#section-6.1.3-2.2.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.3-2.3">
-              <p id="section-6.1.3-2.3.1">Reference: This document<a href="#section-6.1.3-2.3.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.3-2.4">
-              <p id="section-6.1.3-2.4.1">Identifier: cades<a href="#section-6.1.3-2.4.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.3-2.5">
-              <p id="section-6.1.3-2.5.1">Description: CMS/CAdES binding excluding SigningCertificate attributes<a href="#section-6.1.3-2.5.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.3-2.6">
-              <p id="section-6.1.3-2.6.1">Reference: This document<a href="#section-6.1.3-2.6.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.3-2.7">
-              <p id="section-6.1.3-2.7.1">Identifier: xades<a href="#section-6.1.3-2.7.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.3-2.8">
-              <p id="section-6.1.3-2.8.1">Description: XAdES binding excluding SignedProperties reference<a href="#section-6.1.3-2.8.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.3-2.9">
-              <p id="section-6.1.3-2.9.1">Reference: This document<a href="#section-6.1.3-2.9.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.3-2.10">
-              <p id="section-6.1.3-2.10.1">Identifier: jws<a href="#section-6.1.3-2.10.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.3-2.11">
-              <p id="section-6.1.3-2.11.1">Description: JWS payload-only binding<a href="#section-6.1.3-2.11.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.3-2.12">
-              <p id="section-6.1.3-2.12.1">Reference: This document<a href="#section-6.1.3-2.12.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.3-2.13">
-              <p id="section-6.1.3-2.13.1">Identifier: cose<a href="#section-6.1.3-2.13.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.3-2.14">
-              <p id="section-6.1.3-2.14.1">Description: COSE payload-only binding<a href="#section-6.1.3-2.14.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.1.3-2.15">
-              <p id="section-6.1.3-2.15.1">Reference: This document<a href="#section-6.1.3-2.15.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-</section>
-</div>
-</section>
-</div>
+<p id="section-6-1">IANA has registered id-pe-signedDocumentBinding (id-pe 37) in the SMI Security for PKIX Certificate Extension registry.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">IANA is requested to assign an OBJECT IDENTIFIER for id-bt from the SMI Security for PKIX arc (id-pkix), for use as the arc for the signed document binding type identifiers defined in this document.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">IANA is requested to assign an OBJECT IDENTIFIER for the ASN.1 module defined in this document<a href="#section-6-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
@@ -1764,6 +1664,11 @@ usage as a critical extension, includes an authorityKeyIdentifier
 extension, and includes the signedDocumentBinding extension. In both
 examples the data to be signed is hashed with SHA-256, and the dataTbsHash
 value is the 32-octet sequence 0x01 0x02 ... 0x20.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+<p id="appendix-A-3">Note: The id-bt arc has not yet been assigned by IANA. These examples
+anticipate the assignment of 1.3.6.1.5.5.7.26 to id-bt; the CAdES binding
+example below therefore encodes id-bt-cades as 1.3.6.1.5.5.7.26.1
+({ id-bt 1 }). Should IANA assign a different value to the id-bt arc
+(see <a href="#iana" class="auto internal xref">Section 6</a>), these examples will be regenerated to align with it.<a href="#appendix-A-3" class="pilcrow">¶</a></p>
 <div id="certificate-with-default-binding">
 <section id="appendix-A.1">
         <h3 id="name-certificate-with-default-bi">
@@ -1780,18 +1685,18 @@ SignedDocumentBinding ::= SEQUENCE {
   hashAlg      id-sha256 }
 
 -----BEGIN CERTIFICATE-----
-MIICKDCCAc6gAwIBAgIQVweFe0CFvyM8JFDu9wH/AzAKBggqhkjOPQQDAjA8MQsw
+MIICKTCCAc6gAwIBAgIQZe7zqov/Aufh6nVt/mAMWDAKBggqhkjOPQQDAjA8MQsw
 CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxFzAVBgNVBAMMDkV4YW1w
-bGUgT3JnIENBMCAXDTI2MDcwMTE4MzkxMloYDzk5OTkxMjMxMjM1OTU5WjA2MQsw
+bGUgT3JnIENBMCAXDTI2MTAyMDIxMjYzNFoYDzk5OTkxMjMxMjM1OTU5WjA2MQsw
 CQYDVQQGEwJTRTEUMBIGA1UECgwLRXhhbXBsZSBPcmcxETAPBgNVBAMMCEpvaG4g
-RG9lMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoDGGE1EyIPv2VlXSzW00DNJU
-gb5SD8U5GX1inZpc0oHAkNKwYrcFEOtiY4f8vYDN51M+7uvSS+eG3n7104AZdqOB
-tTCBsjArBgNVHSMEJDAigCChSvYTV05U5D1HFAKxqhGCj1tR/2mj1gBGOs7VIwC9
-KjApBgNVHQ4EIgQgbC4lcDHxDRh34nfrxo872YShaEZ6kKHIaYF5dD9Un3IwDgYD
+RG9lMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE8gQ14JPK+/m8VWhRh2km/mDV
+dh0Ha49htyqJLnPeb4pfBBUxR0paZbx10pQxOB/KIy/kXMzrcQVR/zsEIoTSAaOB
+tTCBsjArBgNVHSMEJDAigCDH/dB8wyv8KAJ6APwI1PziC3th/taTu8TAbFiGavtE
+wjApBgNVHQ4EIgQg6Uhmpf7aqymQdRmci2oJv1iDwcUd+jSq6ocVAQ9vkDQwDgYD
 VR0PAQH/BAQDAgZAMAkGA1UdOAQCBQAwPQYIKwYBBQUHASUEMTAvBCABAgMEBQYH
 CAkKCwwNDg8QERITFBUWFxgZGhscHR4fIDALBglghkgBZQMEAgEwCgYIKoZIzj0E
-AwIDSAAwRQIhAKAjo5DGTI++9lJZrilg0ir5UQbxn2IcDBIwImrkQI4jAiBiYxfj
-CVdXwwJEx3AoRrfODm9KrOLsKjA5dRxIewoNlg==
+AwIDSQAwRgIhANSdZFRgNOKSJgvOyoKBmOmdOlJ/9DyNlhOzS5SMt5bdAiEAq824
+Oyp7hCD8EGfyXsDBsP5HO4hOGvNBN+h10cr3NhY=
 -----END CERTIFICATE-----
 </pre><a href="#appendix-A.1-2" class="pilcrow">¶</a>
 </div>
@@ -1800,9 +1705,9 @@ CVdXwwJEx3AoRrfODm9KrOLsKjA5dRxIewoNlg==
 <div id="certificate-with-cades-binding">
 <section id="appendix-A.2">
         <h3 id="name-certificate-with-cades-bind">
-<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-certificate-with-cades-bind" class="section-name selfRef">Certificate with "cades" Binding</a>
+<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-certificate-with-cades-bind" class="section-name selfRef">Certificate with CAdES Binding</a>
         </h3>
-<p id="appendix-A.2-1">In this certificate the bindingType field is set to "cades", indicating the
+<p id="appendix-A.2-1">In this certificate the bindingType field is set to id-bt-cades, indicating the
 CAdES binding defined in this document. The signedDocumentBinding extension
 value contains the dataTbsHash, hashAlg, and bindingType fields:<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-A.2-2">
@@ -1811,21 +1716,21 @@ SignedDocumentBinding ::= SEQUENCE {
   dataTbsHash  0102030405060708090A0B0C0D0E0F10
                1112131415161718191A1B1C1D1E1F20,
   hashAlg      id-sha256,
-  bindingType  "cades" }
+  bindingType  id-bt-cades }
 
 -----BEGIN CERTIFICATE-----
-MIICLzCCAdagAwIBAgIRAKkArNDJbg8prMEiyqT6MI0wCgYIKoZIzj0EAwIwPDEL
+MIICNDCCAdmgAwIBAgIRAOPipqpq0R50YTaa4sEqrfYwCgYIKoZIzj0EAwIwPDEL
 MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMRcwFQYDVQQDDA5FeGFt
-cGxlIE9yZyBDQTAgFw0yNjA3MDExODM5MTJaGA85OTk5MTIzMTIzNTk1OVowNjEL
+cGxlIE9yZyBDQTAgFw0yNjEwMjAyMTI2MzRaGA85OTk5MTIzMTIzNTk1OVowNjEL
 MAkGA1UEBhMCU0UxFDASBgNVBAoMC0V4YW1wbGUgT3JnMREwDwYDVQQDDAhKb2hu
-IERvZTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABKAxhhNRMiD79lZV0s1tNAzS
-VIG+Ug/FORl9Yp2aXNKBwJDSsGK3BRDrYmOH/L2AzedTPu7r0kvnht5+9dOAGXaj
-gbwwgbkwKwYDVR0jBCQwIoAgoUr2E1dOVOQ9RxQCsaoRgo9bUf9po9YARjrO1SMA
-vSowKQYDVR0OBCIEIGwuJXAx8Q0Yd+J368aPO9mEoWhGepChyGmBeXQ/VJ9yMA4G
-A1UdDwEB/wQEAwIGQDAJBgNVHTgEAgUAMEQGCCsGAQUFBwElBDgwNgQgAQIDBAUG
-BwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAwCwYJYIZIAWUDBAIBDAVjYWRlczAK
-BggqhkjOPQQDAgNHADBEAiBdNJa15qBpkYs7IP5Dlzb2ZeaudxNwwZhRUeE8Qvg6
-uQIgLuiqo76eAQkHAiT8IlB/dn74SokUCs48f7ADk9p8zZA=
+IERvZTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABPIENeCTyvv5vFVoUYdpJv5g
+1XYdB2uPYbcqiS5z3m+KXwQVMUdKWmW8ddKUMTgfyiMv5FzM63EFUf87BCKE0gGj
+gb8wgbwwKwYDVR0jBCQwIoAgx/3QfMMr/CgCegD8CNT84gt7Yf7Wk7vEwGxYhmr7
+RMIwKQYDVR0OBCIEIOlIZqX+2qspkHUZnItqCb9Yg8HFHfo0quqHFQEPb5A0MA4G
+A1UdDwEB/wQEAwIGQDAJBgNVHTgEAgUAMEcGCCsGAQUFBwElBDswOQQgAQIDBAUG
+BwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAwCwYJYIZIAWUDBAIBBggrBgEFBQca
+ATAKBggqhkjOPQQDAgNJADBGAiEAs8QmUcxJcUicrcg6SCNDuGbLyOBRzMsL6OHc
+9VxPA+MCIQDvws84x3n6FP1uGIufCtZEFt5e2WDm3/3xmyMAag6/6w==
 -----END CERTIFICATE-----
 </pre><a href="#appendix-A.2-2" class="pilcrow">¶</a>
 </div>
