@@ -242,8 +242,8 @@ Table of Contents
 
 1.2.3.  Key usage
 
-   A one signature certificate certifies a key whose only function is to
-   sign.  Issuers therefore assert a key usage relevant to signing —
+   Since the certificate includes the public key to validate a single
+   signature, isuers MUST assert a key usage relevant to signing —
    digitalSignature (0), nonRepudiation (1), or both — and no other (see
    Section 3).  Because the signedDocumentBinding extension asserts that
    the private key has been destroyed, the inclusion of any additional
