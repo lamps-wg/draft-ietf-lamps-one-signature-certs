@@ -162,7 +162,7 @@ One signature certificates have the following common characteristics:
 - They assert that the corresponding private key was destroyed immediately after signing; and
 - They are typically issued without a revocation mechanism and with no expiration.
 
-The signedDocumentBinding extension binds the public key in the certificate to verification of the signature for the single identified document. When this extension is present, it is RECOMMENDED that the certificate not expire (notAfter is set to the GeneralizedTime value of 99991231235959Z) and the noRevAvail certificate extension [RFC9608] is also present to indicate that no revocation information is available for this certificate.
+The signedDocumentBinding extension binds the public key in the certificate to verification of the signature for the single identified document. When this extension is present, it is RECOMMENDED that the certificate not expire (notAfter is set to the GeneralizedTime value of 99991231235959Z) and the noRevAvail certificate extension {{RFC9608}} is also present to indicate that no revocation information is available for this certificate.
 
 ### Revocation
 
