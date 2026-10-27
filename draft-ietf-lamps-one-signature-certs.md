@@ -45,10 +45,19 @@ normative:
   RFC5035:
   RFC5280:
   RFC5652:
+  RFC5912:
+  RFC6268:
   RFC7515:
   RFC8152:
   RFC8174:
   RFC9608:
+  X680:
+    title: "Information technology - Abstract Syntax Notation One (ASN.1): Specification of basic notation"
+    author:
+      org: ITU-T
+    date: 2021-02
+    seriesinfo:
+      "ITU-T": "Recommendation X.680"
   XMLDSIG11:
     title: "XML Signature Syntax and Processing Version 1.1"
     author:
@@ -106,7 +115,9 @@ normative:
       "ETSI": "EN 319 122-1 v1.2.1"
 
 informative:
+  RFC2986:
   RFC3161:
+  RFC4211:
   RFC5126:
   RFC9321:
   EN319102-1:
@@ -119,7 +130,7 @@ informative:
 
 --- abstract
 
-This document defines the signedDocumentBinding certificate extension, which binds a certificate to the signed content of a digital signature produced by a single signing operation. Each certificate is created at the time of signing and the associated signing key is generated, used to produce a single digital signature, and then immediately destroyed. Certificates carrying this extension are intended to be issued without a revocation mechanism and with no expiration, which simplifies long-term validation.
+This document defines the signedDocumentBinding certificate extension, which binds a certificate to the signed content of a single digital signature. Each certificate is created at the time of signing; the associated signing key is generated for the sole purpose of producing that one signature, is used for no other purpose, and is destroyed immediately afterwards. Certificates carrying this extension are intended to be issued without a revocation mechanism and with no expiration, which simplifies long-term validation.
 
 --- middle
 
@@ -137,11 +148,11 @@ Some reasons why this type of signature services has been successful are:
 
 While this type of signature service solves many problems, it still suffers from the complexity caused by expiring signing certificates. One solution to this problem is the Signature Validation Token (SVT) {{RFC9321}}, where future validation can rely on a previous successful validation rather than validation based on aging data.
 
-This document takes this one step further and allows validation at any time in the future as long as trust in the CA certificate can be established.
+This document takes this one step further and allows validation at any time in the future as long as trust in the Certification Authority (CA) certificate can be established.
 
 ## Design Rationale
 
-An alternate approach for a single signature credential could have certified the hash value of the to-be-signed document. This approach was not taken because verification would be different than other digitally signed documents.  The approach taken allows existing certificate path validation and digital signature validation implementations to process certificates that are associate with one and only one signature.
+An alternate approach for a single signature credential could have certified the hash value of the to-be-signed document. This approach was not taken because verification would be different than other digitally signed documents.  The approach taken allows existing certificate path validation and digital signature validation implementations to process certificates that are associated with one and only one document signature.
 
 ## Basic features
 
@@ -159,13 +170,13 @@ Traditional certificates that are re-used over time have many legitimate reasons
 
 The fact that the same key is used many times exposes the key for the risks of loss, unauthorized usage, or theft. When many objects are signed with the same private key, the risk of exposure and the number of affected signed documents upon revocation increases, unless properly timestamped and properly verified.
 
-When a signing key is used only once, that risk of exposure is greatly reduced, and it has been shown that most usages of dedicated private keys and certificates no longer require revocation.
+When a signing key is used only within a single signing event, that risk of exposure is greatly reduced, and it has been shown that most usages of dedicated private keys and certificates no longer require revocation.
 
-When certificates are used to validate digital signatures the reasons for revocation after the time of signing are not relevant when the key is used only once. Under established signature validation procedures {{EN319102-1}}, a signature is assessed relative to a best-signature-time: the earliest time at which the signature is proven to have existed. A signing certificate that is revoked or that expires after the best-signature-time does not invalidate the signature; the past signature validation process treats such a signature as valid. The same principle underlies the grace period concept described for CAdES signatures {{RFC5126}}. Consequently, revocation information whose effective time is after the time of signing is not relevant to the validity of the signature.
+When certificates are used to validate digital signatures the reasons for revocation after the time of signing are not relevant when the key is used only within a single signing event. Under established signature validation procedures {{EN319102-1}}, a signature is assessed relative to a best-signature-time: the earliest time at which the signature is proven to have existed. A signing certificate that is revoked or that expires after the best-signature-time does not invalidate the signature; the past signature validation process treats such a signature as valid. The same principle underlies the grace period concept described for Cryptographic Message Syntax (CMS) Advanced Electronic Signatures (CAdES) {{RFC5126}}. Consequently, revocation information whose effective time is after the time of signing is not relevant to the validity of the signature.
 
 Establishing the best-signature-time normally requires a trusted time source such as a time-stamp {{RFC3161}} from a trusted authority. A one signature certificate is created at the time of signing, so its issuance time establishes the time of signing directly, with the issuing CA fulfilling a role analogous to that of a time-stamp authority. Any revocation of the certificate would necessarily take effect after this time and would therefore not affect the validity of the already-created signature.
 
-When revocation is due to key compromise, signature verifiers take extra caution because the key compromise could have taken place before the document signature was created. However, for a one signature certificate, the signing key is generated for a single signature and destroyed immediately afterwards, so the window during which the private key exists and could be compromised is extremely small.
+When revocation is due to key compromise, signature verifiers take extra caution because the key compromise could have taken place before the document signature was created. However, for a one signature certificate, the signing key is generated as part of the signing event and destroyed immediately afterwards, so the window during which the private key exists and could be compromised is extremely small.
 
 ### CA certificate validity
 
@@ -182,12 +193,26 @@ This specification assumes that initial validation of a signed document is perfo
 
 Mechanisms for establishing trust in a CA beyond their certificate validity period are outside the scope of this specification.
 
+### Key usage
+
+A one signature certificate certifies a key whose only function is to sign. Issuers therefore have no reason to assert any key usage other than those relevant to signing. The destruction of the signing key, which the extension vouches for, means that any additional key usage has no practical effect in any case.
+
+Validators, by contrast, are not expected to reject a signature merely because an unexpected key usage bit is present. Deployed signature validation software is generally wired to confirm that the key usage bits required for signing are present, not to detect that disallowed bits are absent. Requiring rejection based on the presence of a bit that ought not to be there would run counter to the behaviour of the installed base and would introduce a new interoperability failure mode for no security benefit.
+
+## Supporting certificate issuance {#issuance}
+
+A one signature certificate is created at the time of signing, so the signing key necessarily exists before its certificate does. Producing the verifiable signature therefore depends on first obtaining the certificate, and obtaining the certificate may itself require the key to sign. For example, the key may sign a proof of possession in a PKCS#10 certification request {{RFC2986}}, or possession may be attested without a separate signing operation using the Certificate Request Message Format {{RFC4211}}. Such issuance-supporting signatures are part of, not additional to, the single purpose for which the key is generated: producing one verifiable signature over the bound document. The key is never used for any other purpose.
+
+Signing a proof of possession does not expand the set of signatures that can legitimately be claimed to be valid under the certificate. The signedDocumentBinding extension is a statement by the CA, recorded in the certificate, of the one document this certificate was issued to sign; it stands as evidence of the certificate's legitimate scope. Allowing the key to support its own certification is therefore consistent with the single-use guarantee of this specification.
+
+This document does not mandate any particular certificate request or proof-of-possession protocol. In a typical deployment the signature service generates the key and acts as a local registration authority on behalf of the issuing CA.
+
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
 
 
-# Certificate content
+# Certificate content {#cert-content}
 
 This document defines the signedDocumentBinding extension, which a CA includes in a certificate to bind that certificate to a specific signed content. The presence of this extension is the signal by which a relying party recognizes a certificate as a one signature certificate.
 
@@ -198,6 +223,8 @@ Such a certificate SHOULD indicate that it has no well-defined expiration date b
 Such a certificate SHOULD include the id-ce-noRevAvail extension in compliance with {{RFC9608}}, indicating that the certificate is not supported by any revocation mechanism.
 
 A verifier MUST determine whether these properties apply by inspecting the notAfter field and the presence of the id-ce-noRevAvail extension.
+
+Such a certificate, if it includes a keyUsage extension, SHOULD NOT assert any key usage other than digitalSignature and nonRepudiation (also known as contentCommitment); any combination of these two bits MAY be asserted. The presence of any other keyUsage bit does not invalidate a signature verified using the certificate.
 
 ## The signedDocumentBinding extension
 
@@ -221,7 +248,7 @@ The `hashAlg` field MUST contain the AlgorithmIdentifier of the hash algorithm u
 
 The `bindingType` field MAY contain an identifier that specifies how the data to be signed is derived from the digital object to be signed.
 
-Adding this extension to a certificate is a statement by the CA that the signing key is generated exclusively for the purpose of signing the document bound by this extension, and that the signing key is destroyed after signing. The details for this procedure and how the destruction of the signing key is assured SHOULD be outlined in the certificate policy {{RFC3647}} of the issued certificate.
+Adding this extension to a certificate is a statement by the CA that the signing key is generated exclusively for the purpose of producing the single signature on the document bound by this extension. Serving this purpose includes performing any signing operation required to obtain this certificate, such as signing a proof of possession in a certificate request (see {{issuance}}); the key is used for no other purpose and is destroyed after the document is signed. The details for this procedure and how the destruction of the signing key is assured SHOULD be outlined in the certificate policy {{RFC3647}} of the issued certificate.
 
 ## Defined bindingType identifiers
 
@@ -229,7 +256,7 @@ The `bindingType` field defines how the data to be signed (`dataTbsHash`) is der
 This field identifies a deterministic procedure for selecting the portion of the signed content that is included in the hash computation.
 When the field is omitted, the rules for the default binding type apply.
 
-The purpose of the `dataTbsHash` value is to bind the certificate to the document being signed in order to prevent re-use of the signing key for multiple signed documents. This enforces the contract that the signing key is used only once for creation of one signature only. Validators SHOULD verify that the signed document matches the certificate’s binding information.
+The purpose of the `dataTbsHash` value is to bind the certificate to the document being signed in order to prevent re-use of the signing key for multiple signed documents. This enforces the contract that the certificate is bound to only the single signature for which it was issued, so that no signature other than that one can legitimately be claimed to be valid under the certificate. Validators SHOULD verify that the signed document matches the certificate’s binding information.
 This verification is not required for the signature to validate successfully but provides an additional safeguard against misuse or substitution of certificates.
 
 This document defines a set of `bindingType` identifiers. Additional `bindingType` identifiers MAY be defined by future specifications.
@@ -241,20 +268,20 @@ In this case, the `dataTbsHash` value is the hash of the exact data that is sign
 
 Examples include:
 
-- For XML Signatures {{XMLDSIG11}}, the hash of the SignedInfo element.
-- For CMS Signatures {{RFC5652}}, the DER-encoded SignedAttributes structure.
+- For Extensible Markup Language (XML) Signatures {{XMLDSIG11}}, the hash of the SignedInfo element.
+- For CMS Signatures {{RFC5652}}, the Distinguished Encoding Rules (DER)-encoded SignedAttributes structure.
 - For other formats, the data structure input directly to the signature algorithm.
 
-This `bindingType` MUST NOT be used when the data to be signed includes either the signer certificate itself or a hash of the signer certificate. This includes JWS and COSE signed documents that can include signer certificates in the protected header. JWS signatures {{RFC7515}} MUST use the id-bt-jws `bindingType` and COSE signatures {{RFC8152}} MUST use the id-bt-cose binding type.
+This `bindingType` MUST NOT be used when the data to be signed includes either the signer certificate itself or a hash of the signer certificate. This includes JSON Web Signature (JWS) and CBOR Object Signing and Encryption (COSE) signed documents that can include signer certificates in the protected header. JWS signatures {{RFC7515}} MUST use the id-bt-jws `bindingType` and COSE signatures {{RFC8152}} MUST use the id-bt-cose binding type.
 
 ### CAdES Binding
 
 Identifier: id-bt-cades
 
-For CMS {{RFC5652}} or ETSI CAdES {{CADES}} signatures incorporating SigningCertificate or SigningCertificateV2 attributes {{RFC5035}} in signedAttrs,
+For CMS {{RFC5652}} or European Telecommunications Standards Institute (ETSI) CAdES {{CADES}} signatures incorporating SigningCertificate or SigningCertificateV2 attributes {{RFC5035}} in signedAttrs,
 the `dataTbsHash` value is computed over the DER encoding of SignerInfo excluding any instances of SigningCertificate or SigningCertificateV2 attributes from the SignedAttributes set.
 
-This `bindingType` also applies to PDF {{ISOPDF2}} and ETSI PAdES {{PADES}} signed documents when applicable due to its use of CMS for signing.
+This `bindingType` also applies to Portable Document Format (PDF) {{ISOPDF2}} and ETSI PDF Advanced Electronic Signatures (PAdES) {{PADES}} signed documents when applicable due to its use of CMS for signing.
 
 ### XAdES Binding
 
@@ -270,7 +297,7 @@ Note: This operation is purely textual and does not require XML parsing beyond l
 
 Identifier: id-bt-jws
 
-For JSON Web Signatures (JWS) {{RFC7515}}, the `dataTbsHash` value is computed over the payload only.
+For JWS {{RFC7515}}, the `dataTbsHash` value is computed over the payload only.
 The protected header and any unprotected header parameters MUST NOT be included in the hash calculation.
 
 This exclusion avoids circular dependencies where certificate data may appear in the protected header.
@@ -285,6 +312,8 @@ The protected header and any unprotected header parameters MUST NOT be included 
 This exclusion avoids circular dependencies where certificate data may appear in the protected header.
 
 # ASN.1 Module
+
+This section includes the ASN.1 module {{X680}} for the signedDocumentBinding certificate extension. This module imports objects from {{RFC5912}} and {{RFC6268}}.
 
     <CODE BEGINS>
        SignedDocumentBindingExtn
@@ -347,7 +376,7 @@ The signedDocumentBinding extension binds the certificate to specific signed con
 
 However, a relying party SHOULD verify that the signed content matches the dataTbsHash value in the signedDocumentBinding extension. Performing this check ensures that the certificate is used only with the content for which it was issued and enforces the intended scope of the certificate.
 
-The security model of this specification states that the associated private key is generated for, and used in, exactly one signing operation and is then destroyed. This property holds independently of whether the binding is verified by the relying party. Nevertheless, failure to verify the binding weakens the protections provided by this specification and increases the risk of certificate substitution or unintended certificate reuse.
+The security model of this specification states that the associated private key is generated for the sole purpose of producing the single signature bound by the certificate, including only the signing required to obtain the certificate itself, and is then destroyed. This property holds independently of whether the binding is verified by the relying party. Nevertheless, failure to verify the binding weakens the protections provided by this specification and increases the risk of certificate substitution or unintended certificate reuse.
 
 When verified, the signedDocumentBinding extension provides an additional safeguard against the use of the certificate for any signature other than the one for which it was issued.
 
