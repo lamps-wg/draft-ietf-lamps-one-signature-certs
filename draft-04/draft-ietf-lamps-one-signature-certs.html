@@ -1338,8 +1338,7 @@ svg {
           <h4 id="name-key-usage">
 <a href="#section-1.2.3" class="section-number selfRef">1.2.3. </a><a href="#name-key-usage" class="section-name selfRef">Key usage</a>
           </h4>
-<p id="section-1.2.3-1">A one signature certificate certifies a key whose only function is to sign. Issuers therefore have no reason to assert any key usage other than those relevant to signing. The destruction of the signing key, which the extension vouches for, means that any additional key usage has no practical effect in any case.<a href="#section-1.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-1.2.3-2">Validators, by contrast, are not expected to reject a signature merely because an unexpected key usage bit is present. Deployed signature validation software is generally wired to confirm that the key usage bits required for signing are present, not to detect that disallowed bits are absent. Requiring rejection based on the presence of a bit that ought not to be there would run counter to the behaviour of the installed base and would introduce a new interoperability failure mode for no security benefit.<a href="#section-1.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-1.2.3-1">A one signature certificate certifies a key whose only function is to sign. Issuers therefore assert a key usage relevant to signing — digitalSignature (0), nonRepudiation (1), or both — and no other (see <a href="#cert-content" class="auto internal xref">Section 3</a>). Because the signedDocumentBinding extension asserts that the private key has been destroyed, the inclusion of any additional key usage value has no practical effect in any case.<a href="#section-1.2.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1349,8 +1348,8 @@ svg {
         <h3 id="name-supporting-certificate-issu">
 <a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-supporting-certificate-issu" class="section-name selfRef">Supporting certificate issuance</a>
         </h3>
-<p id="section-1.3-1">A one signature certificate is created at the time of signing, so the signing key necessarily exists before its certificate does. Producing the verifiable signature therefore depends on first obtaining the certificate, and obtaining the certificate may itself require the key to sign. For example, the key may sign a proof of possession in a PKCS#10 certification request <span>[<a href="#RFC2986" class="cite xref">RFC2986</a>]</span>, or possession may be attested without a separate signing operation using the Certificate Request Message Format <span>[<a href="#RFC4211" class="cite xref">RFC4211</a>]</span>. Such issuance-supporting signatures are part of, not additional to, the single purpose for which the key is generated: producing one verifiable signature over the bound document. The key is never used for any other purpose.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
-<p id="section-1.3-2">Signing a proof of possession does not expand the set of signatures that can legitimately be claimed to be valid under the certificate. The signedDocumentBinding extension is a statement by the CA, recorded in the certificate, of the one document this certificate was issued to sign; it stands as evidence of the certificate's legitimate scope. Allowing the key to support its own certification is therefore consistent with the single-use guarantee of this specification.<a href="#section-1.3-2" class="pilcrow">¶</a></p>
+<p id="section-1.3-1">A one signature certificate is created at the time of signing, so the signing key necessarily exists before its certificate does. Producing the verifiable signature therefore depends on first obtaining the certificate, and obtaining the certificate may itself require the key to be used as part of a certificate enrollment process. For example, the key may sign a proof of possession in a PKCS#10 certification request <span>[<a href="#RFC2986" class="cite xref">RFC2986</a>]</span>, or possession may be attested without a separate signing operation using the Certificate Request Message Format <span>[<a href="#RFC4211" class="cite xref">RFC4211</a>]</span>. Such issuance-supporting signatures are part of, not additional to, the single purpose for which the private key is generated: producing one verifiable signature over the bound document. The key is never used for any other purpose.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
+<p id="section-1.3-2">Signing a proof of possession does not expand the set of signatures that can legitimately be claimed to be valid under the certificate. The signedDocumentBinding extension is a statement by the CA, recorded in the certificate, of the one document this certificate was issued to sign; it stands as evidence of the legitimate scope of the certificate. Allowing the key to support its own certification is therefore consistent with the single-use guarantee of this specification.<a href="#section-1.3-2" class="pilcrow">¶</a></p>
 <p id="section-1.3-3">This document does not mandate any particular certificate request or proof-of-possession protocol. In a typical deployment the signature service generates the key and acts as a local registration authority on behalf of the issuing CA.<a href="#section-1.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1373,11 +1372,11 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-certificate-content" class="section-name selfRef">Certificate content</a>
       </h2>
 <p id="section-3-1">This document defines the signedDocumentBinding extension, which a CA includes in a certificate to bind that certificate to a specific signed content. The presence of this extension is the signal by which a relying party recognizes a certificate as a one signature certificate.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">A certificate that includes the signedDocumentBinding extension <span class="bcp14">SHOULD</span> also be issued with the properties described below, which together provide the simplified long-term validation that motivates this document.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-2">The following requirements apply to a certificate that includes the signedDocumentBinding extension.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <p id="section-3-3">Such a certificate <span class="bcp14">SHOULD</span> indicate that it has no well-defined expiration date by setting the notAfter field to the GeneralizedTime value 99991231235959Z, as defined in <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>.<a href="#section-3-3" class="pilcrow">¶</a></p>
 <p id="section-3-4">Such a certificate <span class="bcp14">SHOULD</span> include the id-ce-noRevAvail extension in compliance with <span>[<a href="#RFC9608" class="cite xref">RFC9608</a>]</span>, indicating that the certificate is not supported by any revocation mechanism.<a href="#section-3-4" class="pilcrow">¶</a></p>
 <p id="section-3-5">A verifier <span class="bcp14">MUST</span> determine whether these properties apply by inspecting the notAfter field and the presence of the id-ce-noRevAvail extension.<a href="#section-3-5" class="pilcrow">¶</a></p>
-<p id="section-3-6">Such a certificate, if it includes a keyUsage extension, <span class="bcp14">SHOULD NOT</span> assert any key usage other than digitalSignature and nonRepudiation (also known as contentCommitment); any combination of these two bits <span class="bcp14">MAY</span> be asserted. The presence of any other keyUsage bit does not invalidate a signature verified using the certificate.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-6">Such a certificate <span class="bcp14">MUST</span> assert either the key usage digitalSignature (0) or nonRepudiation (1) (also known as contentCommitment) or both. The certificate <span class="bcp14">MUST NOT</span> assert any other key usage.<a href="#section-3-6" class="pilcrow">¶</a></p>
 <div id="the-signeddocumentbinding-extension">
 <section id="section-3.1">
         <h3 id="name-the-signeddocumentbinding-e">
@@ -1490,7 +1489,7 @@ The protected header and any unprotected header parameters <span class="bcp14">M
       <h2 id="name-asn1-module">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-asn1-module" class="section-name selfRef">ASN.1 Module</a>
       </h2>
-<p id="section-4-1">This section includes the ASN.1 module <span>[<a href="#X680" class="cite xref">X680</a>]</span> for the signedDocumentBinding certificate extension. This module imports objects from <span>[<a href="#RFC5912" class="cite xref">RFC5912</a>]</span> and <span>[<a href="#RFC6268" class="cite xref">RFC6268</a>]</span>.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">This section includes the ASN.1 module <span>[<a href="#X680" class="cite xref">X680</a>]</span> for the signedDocumentBinding certificate extension. This module imports items from <span>[<a href="#RFC5912" class="cite xref">RFC5912</a>]</span> and <span>[<a href="#RFC6268" class="cite xref">RFC6268</a>]</span>.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <div class="sourcecode" id="section-4-2">
 <pre>&lt;CODE BEGINS&gt;
    SignedDocumentBindingExtn
@@ -1576,7 +1575,7 @@ The protected header and any unprotected header parameters <span class="bcp14">M
       </h2>
 <p id="section-6-1">IANA has registered id-pe-signedDocumentBinding (id-pe 37) in the SMI Security for PKIX Certificate Extension registry.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">IANA is requested to assign an OBJECT IDENTIFIER for id-bt from the SMI Security for PKIX arc (id-pkix), for use as the arc for the signed document binding type identifiers defined in this document.<a href="#section-6-2" class="pilcrow">¶</a></p>
-<p id="section-6-3">IANA is requested to assign an OBJECT IDENTIFIER for the ASN.1 module defined in this document<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-3">IANA is requested to assign an OBJECT IDENTIFIER for the ASN.1 module defined in this document.<a href="#section-6-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
