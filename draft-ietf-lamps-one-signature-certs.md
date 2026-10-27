@@ -270,7 +270,7 @@ Examples include:
 - For CMS Signatures {{RFC5652}}, the Distinguished Encoding Rules (DER)-encoded SignedAttributes structure.
 - For other formats, the data structure input directly to the signature algorithm.
 
-This `bindingType` MUST NOT be used when the data to be signed includes either the signer certificate itself or a hash of the signer certificate. This includes JSON Web Signature (JWS) and CBOR Object Signing and Encryption (COSE) signed documents that can include signer certificates in the protected header. JWS signatures {{RFC7515}} MUST use the id-bt-jws `bindingType` and COSE signatures {{RFC8152}} MUST use the id-bt-cose binding type.
+This `bindingType` MUST NOT be used when the data to be signed includes either the signer certificate itself or a hash of the signer certificate. This includes JavaScript Object Notation (JSON) Web Signature (JWS) and Concise Binary Object Representation (CBOR) Object Signing and Encryption (COSE) signed documents that can include signer certificates in the protected header. JWS signatures {{RFC7515}} MUST use the id-bt-jws `bindingType` and COSE signatures {{RFC8152}} MUST use the id-bt-cose binding type.
 
 ### CAdES Binding
 
