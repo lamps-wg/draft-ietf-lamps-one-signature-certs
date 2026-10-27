@@ -195,15 +195,13 @@ Mechanisms for establishing trust in a CA beyond their certificate validity peri
 
 ### Key usage
 
-A one signature certificate certifies a key whose only function is to sign. Issuers therefore have no reason to assert any key usage other than those relevant to signing. The destruction of the signing key, which the extension vouches for, means that any additional key usage has no practical effect in any case.
-
-Validators, by contrast, are not expected to reject a signature merely because an unexpected key usage bit is present. Deployed signature validation software is generally wired to confirm that the key usage bits required for signing are present, not to detect that disallowed bits are absent. Requiring rejection based on the presence of a bit that ought not to be there would run counter to the behaviour of the installed base and would introduce a new interoperability failure mode for no security benefit.
+A one signature certificate certifies a key whose only function is to sign. Issuers therefore assert a key usage relevant to signing — digitalSignature (0), nonRepudiation (1), or both — and no other (see {{cert-content}}). Because the signedDocumentBinding extension asserts that the private key has been destroyed, the inclusion of any additional key usage value has no practical effect in any case.
 
 ## Supporting certificate issuance {#issuance}
 
-A one signature certificate is created at the time of signing, so the signing key necessarily exists before its certificate does. Producing the verifiable signature therefore depends on first obtaining the certificate, and obtaining the certificate may itself require the key to sign. For example, the key may sign a proof of possession in a PKCS#10 certification request {{RFC2986}}, or possession may be attested without a separate signing operation using the Certificate Request Message Format {{RFC4211}}. Such issuance-supporting signatures are part of, not additional to, the single purpose for which the key is generated: producing one verifiable signature over the bound document. The key is never used for any other purpose.
+A one signature certificate is created at the time of signing, so the signing key necessarily exists before its certificate does. Producing the verifiable signature therefore depends on first obtaining the certificate, and obtaining the certificate may itself require the key to be used as part of a certificate enrollment process. For example, the key may sign a proof of possession in a PKCS#10 certification request {{RFC2986}}, or possession may be attested without a separate signing operation using the Certificate Request Message Format {{RFC4211}}. Such issuance-supporting signatures are part of, not additional to, the single purpose for which the private key is generated: producing one verifiable signature over the bound document. The key is never used for any other purpose.
 
-Signing a proof of possession does not expand the set of signatures that can legitimately be claimed to be valid under the certificate. The signedDocumentBinding extension is a statement by the CA, recorded in the certificate, of the one document this certificate was issued to sign; it stands as evidence of the certificate's legitimate scope. Allowing the key to support its own certification is therefore consistent with the single-use guarantee of this specification.
+Signing a proof of possession does not expand the set of signatures that can legitimately be claimed to be valid under the certificate. The signedDocumentBinding extension is a statement by the CA, recorded in the certificate, of the one document this certificate was issued to sign; it stands as evidence of the legitimate scope of the certificate. Allowing the key to support its own certification is therefore consistent with the single-use guarantee of this specification.
 
 This document does not mandate any particular certificate request or proof-of-possession protocol. In a typical deployment the signature service generates the key and acts as a local registration authority on behalf of the issuing CA.
 
@@ -216,7 +214,7 @@ This document does not mandate any particular certificate request or proof-of-po
 
 This document defines the signedDocumentBinding extension, which a CA includes in a certificate to bind that certificate to a specific signed content. The presence of this extension is the signal by which a relying party recognizes a certificate as a one signature certificate.
 
-A certificate that includes the signedDocumentBinding extension SHOULD also be issued with the properties described below, which together provide the simplified long-term validation that motivates this document.
+The following requirements apply to a certificate that includes the signedDocumentBinding extension.
 
 Such a certificate SHOULD indicate that it has no well-defined expiration date by setting the notAfter field to the GeneralizedTime value 99991231235959Z, as defined in {{RFC5280}}.
 
@@ -224,7 +222,7 @@ Such a certificate SHOULD include the id-ce-noRevAvail extension in compliance w
 
 A verifier MUST determine whether these properties apply by inspecting the notAfter field and the presence of the id-ce-noRevAvail extension.
 
-Such a certificate, if it includes a keyUsage extension, SHOULD NOT assert any key usage other than digitalSignature and nonRepudiation (also known as contentCommitment); any combination of these two bits MAY be asserted. The presence of any other keyUsage bit does not invalidate a signature verified using the certificate.
+Such a certificate MUST assert either the key usage digitalSignature (0) or nonRepudiation (1) (also known as contentCommitment) or both. The certificate MUST NOT assert any other key usage.
 
 ## The signedDocumentBinding extension
 
@@ -313,7 +311,7 @@ This exclusion avoids circular dependencies where certificate data may appear in
 
 # ASN.1 Module
 
-This section includes the ASN.1 module {{X680}} for the signedDocumentBinding certificate extension. This module imports objects from {{RFC5912}} and {{RFC6268}}.
+This section includes the ASN.1 module {{X680}} for the signedDocumentBinding certificate extension. This module imports items from {{RFC5912}} and {{RFC6268}}.
 
     <CODE BEGINS>
        SignedDocumentBindingExtn
@@ -386,7 +384,7 @@ IANA has registered id-pe-signedDocumentBinding (id-pe 37) in the SMI Security f
 
 IANA is requested to assign an OBJECT IDENTIFIER for id-bt from the SMI Security for PKIX arc (id-pkix), for use as the arc for the signed document binding type identifiers defined in this document.
 
-IANA is requested to assign an OBJECT IDENTIFIER for the ASN.1 module defined in this document
+IANA is requested to assign an OBJECT IDENTIFIER for the ASN.1 module defined in this document.
 
 --- back
 
