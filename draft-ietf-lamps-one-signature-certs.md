@@ -195,7 +195,7 @@ Mechanisms for establishing trust in a CA beyond their certificate validity peri
 
 ### Key usage
 
-Since the certificate includes the public key to validate a single signature, issuers MUST assert a key usage relevant to signing — digitalSignature (0), nonRepudiation (1), or both — and no other (see {{cert-content}}). Because the signedDocumentBinding extension asserts that the private key has been destroyed, the inclusion of any additional key usage value has no practical effect in any case.
+Since the certificate includes the public key used only to validate a single signature, the only meaningful key usage values for such a key are those relevant to signing — digitalSignature (0), nonRepudiation (1), or both. The signedDocumentBinding extension asserts that the private key has been destroyed, so the inclusion of any additional key usage value would in any case have no practical effect.
 
 ## Supporting certificate issuance {#issuance}
 
