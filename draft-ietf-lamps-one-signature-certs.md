@@ -7,7 +7,7 @@ replaces: draft-santesson-one-signature-certs
 
 docname: draft-ietf-lamps-one-signature-certs-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
-date: 2026-10-27
+date: 2026-10-29
 consensus: true
 v: 3
 # area: Security
@@ -464,4 +464,7 @@ value contains the dataTbsHash, hashAlg, and bindingType fields:
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+The authors are grateful for the review and comments provided by the
+following members of the LAMPS working group, which improved this
+document: Corey Bonnell, Stephen Farrell, Scott Fluhrer, Simon Josefsson,
+John Kemp, François Rousseau, Sean Turner, Carl Wallace, and Guilin Wang.
